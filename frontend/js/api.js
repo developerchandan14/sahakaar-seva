@@ -1,5 +1,5 @@
 // Sahakaar Seva API Client
-const API_BASE = window.API_BASE || 'http://localhost:8000';
+const API_BASE = window.API_BASE || 'https://sahakaar-seva-0409.onrender.com';
 
 class ApiClient {
   constructor() {
