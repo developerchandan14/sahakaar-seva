@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sahakaar Seva | Digital OS for Labour Cooperatives - SIH26089</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'], mono: ['IBM Plex Mono', 'monospace'] },
+      colors: {
+        sahakaar: { 50:'#f0fdf4', 100:'#dcfce7', 500:'#16a34a', 600:'#15803d', 700:'#166534', 900:'#14532d' },
+        coop: { bg:'#fdfbf7', border:'#e7e0d1', ink:'#1a1a18' }
+      }
+    }
+  }
+}
+</script>
+<style>
+  .coop-grid { background-image: radial-gradient(circle at 1px 1px, #e7e0d1 1px, transparent 0); background-size: 24px 24px; }
+  .glass { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+  .animate-in { animation: slideIn 0.4s ease-out; }
+  @keyframes slideIn { from { opacity:0; transform: translateY(8px);} to { opacity:1; transform: translateY(0);} }
+  .flow-arrow { position: relative; }
+  .flow-arrow::after { content: '↓'; position: absolute; left:50%; bottom:-18px; transform: translateX(-50%); font-weight:700; color:#a8a29e; }
+</style>
+</head>
+<body class="bg-[#fdfbf7] text-[#1a1a18] font-sans antialiased selection:bg-green-200">
+
+<!-- NAV -->
+<nav class="sticky top-0 z-50 bg-[#fdfbf7]/80 glass border-b border-[#e7e0d1]">
+  <div class="max-w-[1400px] mx-auto px-6 lg:px-8 h-[64px] flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 bg-[#1a1a18] text-white grid place-items-center font-extrabold text-[18px] rounded-[8px]">स</div>
+      <div>
+        <div class="font-extrabold leading-none tracking-tight text-[17px]">SAHAKAAR SEVA</div>
+        <div class="text-[10px] tracking-[0.18em] font-bold text-[#57534e] uppercase -mt-[1px]">Labour Cooperative OS • SIH26089</div>
+      </div>
+    </div>
+    <div class="hidden md:flex items-center gap-2 text-[13px] font-medium">
+      <span class="px-3 py-1 rounded-full bg-[#1a1a18] text-white">Cooperative-first</span>
+      <span class="px-3 py-1 rounded-full border border-[#e7e0d1]">Not a marketplace clone</span>
+      <span class="px-3 py-1 rounded-full border border-[#e7e0d1]">Faridabad Skilled Workers Coop • 500 members</span>
+    </div>
+    <button onclick="document.getElementById('roles').scrollIntoView({behavior:'smooth'})" class="bg-[#16a34a] hover:bg-[#15803d] text-white px-5 py-2.5 rounded-full text-[13px] font-bold tracking-wide">OPEN LIVE DEMO</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="max-w-[1400px] mx-auto px-6 lg:px-8 pt-10 pb-6">
+  <div class="grid lg:grid-cols-[1.1fr_0.9fr] gap-10 items-start">
+    <div>
+      <div class="inline-flex items-center gap-2 bg-white border border-[#e7e0d1] rounded-full px-3 py-1 text-[11px] font-bold tracking-widest uppercase mb-5">
+        <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+        Judges: Read this first • Cooperative is the system
+      </div>
+      <h1 class="text-[42px] lg:text-[56px] font-[800] leading-[0.95] tracking-[-0.03em]">
+        Not a marketplace.<br>
+        <span class="text-[#16a34a]">A digital operating system</span><br>
+        for worker cooperatives.
+      </h1>
+      <p class="mt-5 text-[18px] leading-[1.5] text-[#57534e] max-w-[560px]">
+        “Our platform digitizes the entire ecosystem of labour service cooperatives, enabling them to connect verified workers with customers while improving job access, transparency, workforce planning, skill development, and service management.”
+      </p>
+
+      <div class="mt-8 grid grid-cols-3 gap-3 max-w-[560px]">
+        <div class="bg-white border border-[#e7e0d1] rounded-[16px] p-4">
+          <div class="text-[11px] font-bold tracking-widest uppercase text-[#a8a29e]">Normal Marketplace</div>
+          <div class="mt-2 font-mono text-[13px] leading-[1.4]">Platform goal:<br>MORE BOOKINGS<br>MORE COMMISSION<br>MORE PROFIT</div>
+        </div>
+        <div class="bg-[#1a1a18] text-white rounded-[16px] p-4 col-span-2">
+          <div class="text-[11px] font-bold tracking-widest uppercase text-[#a8a29e]">Cooperative Platform</div>
+          <div class="mt-2 grid grid-cols-2 gap-2 text-[13px] font-medium leading-[1.4]">
+            <span>✓ More work opportunities</span><span>✓ Fair distribution</span>
+            <span>✓ Worker development</span><span>✓ Service quality</span>
+            <span>✓ Worker welfare</span><span>✓ Transparent pay</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-8 flex flex-wrap gap-3">
+        <button onclick="switchRole('customer')" class="px-5 py-3 rounded-full bg-[#1a1a18] text-white font-bold text-[13px]">👤 Customer Flow</button>
+        <button onclick="switchRole('worker')" class="px-5 py-3 rounded-full bg-white border border-[#1a1a18] font-bold text-[13px]">🔧 Worker Member View</button>
+        <button onclick="switchRole('coop')" class="px-5 py-3 rounded-full bg-[#16a34a] text-white font-bold text-[13px]">🏛️ Cooperative OS</button>
+      </div>
+    </div>
+
+    <!-- Architecture Diagram -->
+    <div class="bg-white border border-[#e7e0d1] rounded-[24px] p-6 lg:p-8 shadow-[0_16px_40px_rgba(0,0,0,0.06)]">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="font-bold tracking-tight">System Architecture</h3>
+        <span class="text-[11px] font-mono bg-[#f5f5f4] px-2 py-1 rounded">SIH26089 • CORRECT MODEL</span>
+      </div>
+
+      <div class="space-y-6 font-mono text-[12px]">
+        <div class="flex flex-col items-center gap-2">
+          <div class="w-full bg-[#f0fdf4] border-2 border-dashed border-[#16a34a] rounded-[12px] p-3 text-center">
+            <div class="font-bold text-[13px] font-sans">50 Electricians + 30 Plumbers + 20 Carpenters</div>
+            <div class="text-[#57534e]">Form / Join ↓</div>
+          </div>
+          <div class="w-[2px] h-4 bg-[#a8a29e]"></div>
+          <div class="w-full bg-[#1a1a18] text-white rounded-[12px] p-4 text-center">
+            <div class="font-sans font-bold text-[14px] tracking-wide">LABOUR SERVICE COOPERATIVE</div>
+            <div class="mt-2 grid grid-cols-2 gap-1 text-[11px] text-left opacity-80">
+              <span>• Worker registration</span><span>• Verification</span>
+              <span>• Job opportunities</span><span>• Training</span>
+              <span>• Welfare</span><span>• Payments</span>
+            </div>
+          </div>
+          <div class="w-[2px] h-4 bg-[#a8a29e]"></div>
+          <div class="w-full bg-white border-2 border-[#1a1a18] rounded-[12px] p-3 text-center shadow-sm">
+            <div class="font-sans font-extrabold">SAHAKAAR SEVA WEBSITE</div>
+            <div class="text-[10px] tracking-widest uppercase mt-1">Digital Operating System</div>
+            <div class="mt-2 flex justify-center gap-2">
+              <span class="px-2 py-1 bg-[#f5f5f4] rounded-full text-[10px]">Find</span>
+              <span class="px-2 py-1 bg-[#f5f5f4] rounded-full text-[10px]">Book</span>
+              <span class="px-2 py-1 bg-[#f5f5f4] rounded-full text-[10px]">Pay</span>
+              <span class="px-2 py-1 bg-[#f5f5f4] rounded-full text-[10px]">Rate</span>
+            </div>
+          </div>
+          <div class="w-[2px] h-4 bg-[#a8a29e]"></div>
+          <div class="w-full bg-[#fef3c7] border border-[#f59e0b] rounded-[12px] p-3 text-center">
+            <div class="font-sans font-bold">CUSTOMERS</div>
+            <div class="text-[11px]">Verified workers • Transparent pricing • Dispute resolution</div>
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-dashed border-[#e7e0d1]">
+          <div class="font-sans font-bold text-[12px] mb-2">Worker is NOT just an employee</div>
+          <div class="bg-[#f5f5f4] rounded-[8px] p-3 leading-[1.5]">
+            <span class="line-through text-[#a8a29e]">Company → Salary → Worker</span><br>
+            <span class="font-bold text-[#16a34a]">Customer → Payment Gateway → [Worker 88% | Coop 6% | Platform 6%] → Transparent settlement</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROLE TABS -->
+<section id="roles" class="max-w-[1400px] mx-auto px-6 lg:px-8 mt-6">
+  <div class="bg-[#1a1a18] rounded-[20px] p-1.5 flex gap-1.5 w-fit">
+    <button id="tab-customer" onclick="switchRole('customer')" class="role-tab px-6 py-2.5 rounded-[14px] text-[13px] font-bold bg-white text-[#1a1a18]">👤 CUSTOMER PORTAL</button>
+    <button id="tab-worker" onclick="switchRole('worker')" class="role-tab px-6 py-2.5 rounded-[14px] text-[13px] font-bold text-white/70 hover:text-white">🔧 WORKER MEMBER</button>
+    <button id="tab-coop" onclick="switchRole('coop')" class="role-tab px-6 py-2.5 rounded-[14px] text-[13px] font-bold text-white/70 hover:text-white">🏛️ COOPERATIVE OS • MAIN</button>
+  </div>
+</section>
+
+<!-- CUSTOMER VIEW -->
+<div id="view-customer" class="role-view max-w-[1400px] mx-auto px-6 lg:px-8 mt-6">
+  <div class="grid lg:grid-cols-[320px_1fr] gap-6">
+    <!-- Filters -->
+    <div class="bg-white border border-[#e7e0d1] rounded-[20px] p-5 h-fit">
+      <h4 class="font-bold text-[14px]">Find verified cooperative members</h4>
+      <p class="text-[12px] text-[#57534e] mt-1">Every worker is verified by the cooperative, not just rated by customers.</p>
+      
+      <div class="mt-5 space-y-4">
+        <div>
+          <label class="text-[11px] font-bold tracking-widest uppercase">Service Category</label>
+          <div class="mt-2 grid grid-cols-2 gap-2">
+            <button class="service-btn active border-2 border-[#1a1a18] bg-[#1a1a18] text-white rounded-full py-2 text-[12px] font-bold" data-service="electrician">⚡ Electrician</button>
+            <button class="service-btn border border-[#e7e0d1] rounded-full py-2 text-[12px] font-bold" data-service="plumber">🚿 Plumber</button>
+            <button class="service-btn border border-[#e7e0d1] rounded-full py-2 text-[12px] font-bold" data-service="carpenter">🪚 Carpenter</button>
+            <button class="service-btn border border-[#e7e0d1] rounded-full py-2 text-[12px] font-bold" data-service="cleaner">🧹 Cleaner</button>
+          </div>
+        </div>
+        <div>
+          <label class="text-[11px] font-bold tracking-widest uppercase">Cooperative Verification</label>
+          <div class="mt-2 bg-[#f0fdf4] border border-[#bbf7d0] rounded-[12px] p-3 text-[12px]">
+            <div class="flex items-center gap-2 font-bold text-[#166534]"><span>✓</span> Faridabad Skilled Workers Coop</div>
+            <div class="mt-1 text-[#57534e]">ID: FSWC/2024 • 500 members • Govt. Regd.</div>
+          </div>
+        </div>
+        <div class="bg-[#f5f5f4] rounded-[12px] p-3 text-[11px] leading-[1.5] font-mono">
+          COOPERATIVE TRUST LAYER:<br>
+          • Police verification ✓<br>
+          • Skill test ✓<br>
+          • Training completed ✓<br>
+          • Insurance active ✓
+        </div>
+      </div>
+    </div>
+
+    <!-- Worker List -->
+    <div>
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="font-bold text-[18px]">Available Member Workers • <span class="text-[#16a34a]">120 Electricians</span> in coop</h3>
+        <span class="text-[11px] font-mono bg-white border px-2 py-1 rounded-full">Sorted by fair distribution • not just rating</span>
+      </div>
+      <div id="workerList" class="grid md:grid-cols-2 gap-4"></div>
+
+      <!-- Booking Modal Inline -->
+      <div id="bookingPanel" class="hidden mt-6 bg-[#1a1a18] text-white rounded-[20px] p-6 animate-in">
+        <div class="flex justify-between items-start">
+          <div>
+            <h4 class="font-bold text-[16px]">Transparent Payment • No hidden commission</h4>
+            <p class="text-[12px] text-white/60 mt-1">This is the configurable model you asked for. Percentages approved by cooperative rules.</p>
+          </div>
+          <button onclick="document.getElementById('bookingPanel').classList.add('hidden')" class="text-white/60 hover:text-white">✕</button>
+        </div>
+        <div class="mt-6 grid lg:grid-cols-[1.2fr_0.8fr] gap-6">
+          <div class="bg-white/10 rounded-[16px] p-5">
+            <div class="text-[11px] tracking-widest uppercase font-bold text-white/50">Customer Payment Breakdown</div>
+            <div class="mt-4 space-y-3 font-mono text-[13px]">
+              <div class="flex justify-between"><span>Service: Switchboard Repair</span><span>₹500</span></div>
+              <div class="h-[1px] bg-white/20"></div>
+              <div class="flex justify-between text-[#4ade80]"><span>→ Worker Earnings (88%)</span><span id="pay-worker">₹440</span></div>
+              <div class="flex justify-between text-white/70"><span>→ Cooperative Operations (6%)</span><span id="pay-coop">₹30</span></div>
+              <div class="flex justify-between text-white/70"><span>→ Platform/Payment Costs (6%)</span><span id="pay-platform">₹30</span></div>
+              <div class="h-[1px] bg-white/20"></div>
+              <div class="flex justify-between font-bold"><span>Total Paid by Customer</span><span>₹500</span></div>
+            </div>
+            <div class="mt-4 text-[11px] leading-[1.5] text-white/60">
+              Cooperative uses funds for: Administration, Training, Verification, Worker support, Digital operations, Welfare programs.
+              <br><br>
+              <span class="text-[#4ade80] font-bold">Direct Payment Model option:</span> Payment gateway splits directly → Worker ₹440, Coop ₹30, Platform ₹30. Worker sees: "Customer paid ₹500. You received ₹440."
+            </div>
+          </div>
+          <div class="bg-white text-[#1a1a18] rounded-[16px] p-5">
+            <div class="text-[11px] font-bold tracking-widest uppercase">Worker Will See</div>
+            <div class="mt-3 bg-[#f0fdf4] border border-[#bbf7d0] rounded-[12px] p-3">
+              <div class="text-[12px] font-bold text-[#166534]">Transparency Notification</div>
+              <div class="mt-1 text-[13px] leading-[1.4] font-mono">Customer paid ₹500.<br>You received <span class="font-bold">₹440</span> (88%).<br>Coop fee ₹30 used for insurance + training.</div>
+            </div>
+            <button class="mt-4 w-full bg-[#16a34a] text-white py-3 rounded-full font-bold text-[13px]">CONFIRM BOOKING & PAY ₹500</button>
+            <div class="mt-3 text-[11px] text-center text-[#57534e]">Settlement via cooperative payment system • UPI • Instant</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WORKER VIEW -->
+<div id="view-worker" class="role-view hidden max-w-[1400px] mx-auto px-6 lg:px-8 mt-6">
+  <div class="grid lg:grid-cols-[340px_1fr] gap-6">
+    <div class="space-y-4">
+      <div class="bg-white border-2 border-[#1a1a18] rounded-[20px] p-5">
+        <div class="flex items-center gap-3">
+          <img src="https://i.pravatar.cc/100?img=12" class="w-14 h-14 rounded-full object-cover">
+          <div>
+            <div class="font-bold">Ramesh Kumar</div>
+            <div class="text-[12px] text-[#57534e]">Electrician • Member ID: FSWC-E-184</div>
+            <div class="mt-1 inline-flex items-center gap-1 bg-[#f0fdf4] border border-[#bbf7d0] px-2 py-0.5 rounded-full text-[10px] font-bold text-[#166534]">✓ VERIFIED MEMBER • Since 2021</div>
+          </div>
+        </div>
+        <div class="mt-4 grid grid-cols-2 gap-2 text-[11px] font-mono">
+          <div class="bg-[#f5f5f4] rounded-[10px] p-2.5"><div class="text-[#a8a29e] uppercase font-bold">Jobs Done</div><div class="text-[18px] font-bold font-sans">1,247</div></div>
+          <div class="bg-[#f5f5f4] rounded-[10px] p-2.5"><div class="text-[#a8a29e] uppercase font-bold">Rating</div><div class="text-[18px] font-bold font-sans">4.8 ★</div></div>
+          <div class="bg-[#f5f5f4] rounded-[10px] p-2.5"><div class="text-[#a8a29e] uppercase font-bold">Earnings MTD</div><div class="text-[18px] font-bold font-sans">₹38,400</div></div>
+          <div class="bg-[#f0fdf4] rounded-[10px] p-2.5 border border-[#bbf7d0]"><div class="text-[#166534] uppercase font-bold">Welfare</div><div class="text-[13px] font-bold font-sans">Insurance Active</div></div>
+        </div>
+        <div class="mt-4 space-y-2">
+          <div class="flex justify-between text-[11px] font-bold uppercase tracking-widest"><span>Skills</span><span class="text-[#16a34a]">Manage</span></div>
+          <div class="flex flex-wrap gap-1.5"><span class="px-2.5 py-1 bg-[#1a1a18] text-white rounded-full text-[11px]">Wiring</span><span class="px-2.5 py-1 bg-white border rounded-full text-[11px]">Switchboard</span><span class="px-2.5 py-1 bg-white border rounded-full text-[11px]">Inverter</span><span class="px-2.5 py-1 bg-[#fef3c7] border border-[#f59e0b] rounded-full text-[11px]">+2 pending training</span></div>
+        </div>
+      </div>
+
+      <div class="bg-[#1a1a18] text-white rounded-[20px] p-5">
+        <div class="text-[11px] tracking-widest uppercase font-bold text-white/50">Today's Opportunity • Fair Distribution</div>
+        <div class="mt-3 text-[13px] leading-[1.5]">Cooperative ensures you get fair jobs, not just top-rated workers getting all bookings.</div>
+        <div class="mt-4 bg-white/10 rounded-[12px] p-3 font-mono text-[12px]">
+          Your avg jobs/day: <span class="text-[#4ade80] font-bold">4.2</span> (Electrician avg)<br>
+          Cooperative goal: Balance load so no one is idle
+        </div>
+      </div>
+    </div>
+
+    <div class="space-y-4">
+      <div class="bg-white border border-[#e7e0d1] rounded-[20px] p-5">
+        <div class="flex items-center justify-between">
+          <h4 class="font-bold">Incoming Job Requests • Cooperative Assigned</h4>
+          <span class="text-[11px] font-mono bg-[#f0fdf4] border border-[#bbf7d0] px-2 py-1 rounded-full">3 NEW • Via Coop</span>
+        </div>
+        <div id="workerJobs" class="mt-4 space-y-3"></div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="bg-white border border-[#e7e0d1] rounded-[20px] p-5">
+          <h4 class="font-bold text-[13px] tracking-wide uppercase">Earnings Transparency</h4>
+          <div class="mt-3 space-y-2 font-mono text-[12px]">
+            <div class="flex justify-between"><span>Last job: Customer paid</span><span>₹500</span></div>
+            <div class="flex justify-between text-[#16a34a] font-bold"><span>You received</span><span>₹440 (88%)</span></div>
+            <div class="flex justify-between text-[#a8a29e]"><span>Cooperative fee</span><span>₹30 → insurance fund</span></div>
+            <div class="mt-3 bg-[#f5f5f4] rounded-[10px] p-2.5 text-[11px] leading-[1.4]">This month: ₹38,400 earned. ₹2,100 contributed to cooperative (covers training + welfare + platform). Fully transparent in app.</div>
+          </div>
+        </div>
+        <div class="bg-[#fefce8] border border-[#fde68a] rounded-[20px] p-5">
+          <h4 class="font-bold text-[13px] tracking-wide uppercase">Training & Welfare</h4>
+          <div class="mt-3 space-y-2 text-[12px]">
+            <div class="flex items-center gap-2"><span class="w-5 h-5 bg-[#1a1a18] text-white grid place-items-center rounded-full text-[10px]">✓</span> Safety Training Completed</div>
+            <div class="flex items-center gap-2"><span class="w-5 h-5 bg-[#f59e0b] text-white grid place-items-center rounded-full text-[10px]">!</span> EV Charger Installation • 2 days • Free for members</div>
+            <div class="flex items-center gap-2"><span class="w-5 h-5 bg-white border grid place-items-center rounded-full text-[10px]">○</span> Insurance: Family cover ₹2L • Premium paid by coop fund</div>
+            <button class="mt-2 w-full bg-[#1a1a18] text-white py-2 rounded-full text-[11px] font-bold">VIEW ALL COOP BENEFITS</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COOPERATIVE VIEW - THE MAIN OS -->
+<div id="view-coop" class="role-view hidden max-w-[1400px] mx-auto px-6 lg:px-8 mt-6">
+  <!-- Stats -->
+  <div class="grid grid-cols-2 lg:grid-cols-5 gap-3">
+    <div class="bg-white border border-[#e7e0d1] rounded-[16px] p-4">
+      <div class="text-[11px] font-bold tracking-widest uppercase text-[#a8a29e]">Total Workers</div>
+      <div class="text-[28px] font-extrabold leading-none mt-2">500</div>
+      <div class="text-[11px] mt-1 font-mono">Elec 120 • Plum 95 • Carp 80 • Clean 205</div>
+    </div>
+    <div class="bg-white border border-[#e7e0d1] rounded-[16px] p-4">
+      <div class="text-[11px] font-bold tracking-widest uppercase text-[#a8a29e]">Today's Jobs</div>
+      <div class="text-[28px] font-extrabold leading-none mt-2">247</div>
+      <div class="text-[11px] mt-1 font-mono"><span class="text-green-600">201 done</span> • 35 active • 11 cancelled</div>
+    </div>
+    <div class="bg-[#1a1a18] text-white rounded-[16px] p-4">
+      <div class="text-[11px] font-bold tracking-widest uppercase text-white/50">Avg Jobs / Worker</div>
+      <div class="text-[28px] font-extrabold leading-none mt-2">3.1</div>
+      <div class="text-[11px] mt-1 font-mono text-white/60">Fair distribution enabled</div>
+    </div>
+    <div class="bg-[#f0fdf4] border border-[#bbf7d0] rounded-[16px] p-4">
+      <div class="text-[11px] font-bold tracking-widest uppercase text-[#166534]">Revenue Today</div>
+      <div class="text-[28px] font-extrabold leading-none mt-2 text-[#166534]">₹1.2L</div>
+      <div class="text-[11px] mt-1 font-mono">Worker earnings: ₹1.06L</div>
+    </div>
+    <div class="bg-[#fef3c7] border border-[#fde68a] rounded-[16px] p-4">
+      <div class="text-[11px] font-bold tracking-widest uppercase text-[#92400e]">Attention Needed</div>
+      <div class="text-[14px] font-bold leading-[1.2] mt-2">Carpenters 1.7 jobs ⚠</div>
+      <div class="text-[11px] mt-1 font-mono">Demand ↓ 40% • Promote?</div>
+    </div>
+  </div>
+
+  <div class="mt-6 grid lg:grid-cols-[1.6fr_1fr] gap-6">
+    <!-- Left: Analytics -->
+    <div class="space-y-6">
+      <div class="bg-white border border-[#e7e0d1] rounded-[20px] p-6">
+        <div class="flex items-center justify-between">
+          <h4 class="font-bold">Worker Opportunity Intelligence • The REAL Value</h4>
+          <span class="text-[11px] font-mono bg-[#f5f5f4] px-2 py-1 rounded-full">Cooperative notices trends, not just bookings</span>
+        </div>
+        <div class="mt-5 grid md:grid-cols-2 gap-6">
+          <div>
+            <canvas id="jobsPerWorkerChart" height="180"></canvas>
+            <div class="mt-3 bg-[#fef3c7] border border-[#fde68a] rounded-[10px] p-3 text-[11px] leading-[1.5]">
+              <span class="font-bold">Cooperative Insight:</span> Carpenters receiving fewer jobs (1.7 vs 4.2 avg). Action: Investigate demand, promote carpentry services, plan training.
+            </div>
+          </div>
+          <div>
+            <canvas id="demandChart" height="180"></canvas>
+            <div class="mt-3 bg-[#f0fdf4] border border-[#bbf7d0] rounded-[10px] p-3 text-[11px] leading-[1.5]">
+              <span class="font-bold text-[#166534]">Demand Spike:</span> Electrical services +40% this month. Action: Recruit more electricians, train existing members, increase availability.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white border border-[#e7e0d1] rounded-[20px] p-6">
+        <div class="flex items-center justify-between">
+          <h4 class="font-bold">Manage Workers • Verification • Quality</h4>
+          <div class="flex gap-2">
+            <span class="text-[11px] px-2 py-1 bg-[#f0fdf4] border rounded-full">Verified: 487</span>
+            <span class="text-[11px] px-2 py-1 bg-[#fef3c7] border rounded-full">Pending: 13</span>
+          </div>
+        </div>
+        <div class="mt-4 overflow-x-auto">
+          <table class="w-full text-[12px]">
+            <thead class="text-[11px] uppercase tracking-widest text-[#a8a29e] border-b">
+              <tr><th class="text-left py-2 font-bold">Member</th><th class="text-left py-2 font-bold">Skill</th><th class="text-left py-2 font-bold">Jobs/Wk</th><th class="text-left py-2 font-bold">Verification</th><th class="text-left py-2 font-bold">Welfare</th></tr>
+            </thead>
+            <tbody id="coopWorkerTable" class="font-mono"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Configurable Payment + Operations -->
+    <div class="space-y-6">
+      <div class="bg-[#1a1a18] text-white rounded-[20px] p-6">
+        <h4 class="font-bold">Configurable Payment Distribution</h4>
+        <p class="text-[11px] text-white/60 mt-1 leading-[1.5]">Don't hardcode percentages. Make it configurable and approved per cooperative rules. Transparent, not exploitative.</p>
+        
+        <div class="mt-6 space-y-5">
+          <div>
+            <div class="flex justify-between text-[11px] font-bold tracking-widest uppercase"><span>Worker Earnings</span><span id="val-worker" class="text-[#4ade80]">88%</span></div>
+            <input id="slider-worker" type="range" min="70" max="95" value="88" class="w-full mt-2 accent-[#4ade80]">
+            <div class="text-[11px] text-white/50 font-mono mt-1">Goes directly to member worker</div>
+          </div>
+          <div>
+            <div class="flex justify-between text-[11px] font-bold tracking-widest uppercase"><span>Cooperative Contribution</span><span id="val-coop" class="text-[#facc15]">6%</span></div>
+            <input id="slider-coop" type="range" min="2" max="15" value="6" class="w-full mt-2 accent-[#facc15]">
+            <div class="text-[11px] text-white/50 font-mono mt-1">For: Admin, Training, Verification, Welfare, Insurance</div>
+          </div>
+          <div>
+            <div class="flex justify-between text-[11px] font-bold tracking-widest uppercase"><span>Platform / Payment Costs</span><span id="val-platform" class="text-white">6%</span></div>
+            <input id="slider-platform" type="range" min="2" max="15" value="6" class="w-full mt-2 accent-white">
+            <div class="text-[11px] text-white/50 font-mono mt-1">Digital ops, gateway fees, server</div>
+          </div>
+
+          <div class="bg-white/10 rounded-[12px] p-4 font-mono text-[12px]">
+            <div class="text-[11px] uppercase tracking-widest text-white/50">Example: ₹500 job</div>
+            <div class="mt-2 space-y-1">
+              <div class="flex justify-between"><span>Worker</span><span id="ex-worker" class="font-bold text-[#4ade80]">₹440</span></div>
+              <div class="flex justify-between"><span>Cooperative</span><span id="ex-coop">₹30</span></div>
+              <div class="flex justify-between"><span>Platform</span><span id="ex-platform">₹30</span></div>
+              <div class="h-[1px] bg-white/20 my-2"></div>
+              <div class="flex justify-between font-bold"><span>Total</span><span>₹500</span></div>
+            </div>
+            <div class="mt-3 text-[10px] text-white/50 leading-[1.4]">Note: Don't call it "salary to cooperative" or "welfare deduction" unless rules require. Use: Customer Payment → Worker Earnings + Cooperative Fee + Platform Costs. Much clearer.</div>
+          </div>
+
+          <div class="flex gap-2">
+            <button class="flex-1 bg-[#16a34a] py-2.5 rounded-full text-[12px] font-bold">SAVE AS COOP POLICY</button>
+            <button class="flex-1 bg-white/10 py-2.5 rounded-full text-[12px] font-bold">PREVIEW TRANSPARENCY</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white border border-[#e7e0d1] rounded-[20px] p-6">
+        <h4 class="font-bold text-[13px] uppercase tracking-wide">Cooperative Dashboard Answers</h4>
+        <div class="mt-4 space-y-3 text-[12px] font-mono">
+          <div class="bg-[#f5f5f4] rounded-[10px] p-3">
+            <div class="font-bold font-sans text-[12px]">Workers</div>
+            Total: 500<br>
+            Electricians: 120<br>
+            Plumbers: 95<br>
+            Carpenters: 80<br>
+            Cleaners: 205
+          </div>
+          <div class="bg-[#f5f5f4] rounded-[10px] p-3">
+            <div class="font-bold font-sans text-[12px]">Jobs</div>
+            Today's: 247<br>
+            Completed: 201<br>
+            Active: 35<br>
+            Cancelled: 11
+          </div>
+          <div class="bg-[#fef3c7] border border-[#fde68a] rounded-[10px] p-3">
+            <div class="font-bold font-sans text-[12px]">Worker Opportunity ⚠</div>
+            Avg jobs per worker<br>
+            Electricians: 4.2<br>
+            Plumbers: 3.8<br>
+            Carpenters: 1.7 ⚠<br>
+            <span class="text-[#92400e]">Coop notices → investigate</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-[#f0fdf4] border-2 border-[#16a34a] border-dashed rounded-[20px] p-5">
+        <h4 class="font-bold text-[#166534]">What judges need to hear</h4>
+        <p class="mt-2 text-[13px] leading-[1.5] text-[#166534]">We are NOT building another Urban Company. We are building the digital backbone for existing labour cooperatives that already have 500+ members but no tech.</p>
+        <div class="mt-3 text-[11px] font-mono bg-white border border-[#bbf7d0] rounded-[10px] p-3 leading-[1.5]">
+          Customer side: Find, Book, Pay, Rate<br>
+          Worker side: Get jobs, Manage skills, Availability, Earnings, Training<br>
+          Cooperative side: Manage workers, Verify, Monitor quality, Distribute opportunities, Plan training, Track welfare, Resolve disputes
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer Intelligence -->
+<footer class="max-w-[1400px] mx-auto px-6 lg:px-8 mt-12 mb-10">
+  <div class="bg-white border border-[#e7e0d1] rounded-[24px] p-8">
+    <div class="grid lg:grid-cols-3 gap-8">
+      <div>
+        <h4 class="font-extrabold text-[14px] tracking-tight">The Intelligence Layer</h4>
+        <p class="mt-2 text-[13px] leading-[1.6] text-[#57534e]">Worker completes job → Cooperative system records → Worker history updates → Demand data updates → Cooperative sees trends → Recruits/trains accordingly. That's not a booking app. That's workforce planning.</p>
+      </div>
+      <div class="bg-[#1a1a18] text-white rounded-[16px] p-5">
+        <div class="text-[11px] tracking-widest uppercase font-bold text-white/50">Direct Payment Model</div>
+        <pre class="mt-3 text-[11px] font-mono leading-[1.6]">CUSTOMER
+    │
+    ↓
+PAYMENT GATEWAY
+    │
+    ├──────────────→ WORKER ₹440
+    │
+    ├──────────────→ COOPERATIVE ₹30
+    │
+    └──────────────→ PLATFORM ₹30
+
+Transparent. Auditable.
+Worker sees exactly what customer paid.</pre>
+      </div>
+      <div class="bg-[#f0fdf4] border border-[#bbf7d0] rounded-[16px] p-5">
+        <div class="text-[11px] tracking-widest uppercase font-bold text-[#166534]">Why Cooperative Needed?</div>
+        <div class="mt-3 text-[12px] leading-[1.5] font-mono">
+          100 electricians individually:<br>
+          A → Many customers<br>
+          B → Almost none<br>
+          C → No digital presence<br>
+          D → No insurance<br>
+          E → Doesn't know where jobs are<br><br>
+          <span class="font-bold text-[#166534]">Cooperative organizes them → trusted org between customers and workers.</span>
+        </div>
+      </div>
+    </div>
+    <div class="mt-8 pt-6 border-t border-[#e7e0d1] flex flex-wrap items-center justify-between gap-4">
+      <div class="text-[11px] font-mono text-[#a8a29e]">SIH26089 • Sahakaar Seva • Faridabad Skilled Workers Cooperative • Prototype v1 • Configurable distribution • Transparent settlement</div>
+      <div class="flex gap-2"><span class="px-3 py-1 bg-[#1a1a18] text-white rounded-full text-[11px] font-bold">BUILT FOR COOPERATIVE, NOT FOR COMMISSION</span></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Mock Data
+const workersData = [
+  { name:'Sunil Yadav', skill:'Electrician', exp:'12 yrs', rating:4.9, jobs:342, rate:500, verified:true, insurance:true, badge:'Top Rated', img:'https://i.pravatar.cc/100?img=11' },
+  { name:'Amit Verma', skill:'Electrician', exp:'8 yrs', rating:4.8, jobs:210, rate:450, verified:true, insurance:true, badge:'Coop Member 5y', img:'https://i.pravatar.cc/100?img=15' },
+  { name:'Priya Sharma', skill:'Electrician', exp:'5 yrs', rating:4.7, jobs:98, rate:400, verified:true, insurance:false, badge:'New • Needs jobs', img:'https://i.pravatar.cc/100?img=5' },
+  { name:'Rohit Singh', skill:'Electrician', exp:'15 yrs', rating:5.0, jobs:512, rate:600, verified:true, insurance:true, badge:'Master Trainer', img:'https://i.pravatar.cc/100?img=20' },
+];
+
+function renderWorkers() {
+  const container = document.getElementById('workerList');
+  container.innerHTML = workersData.map(w => `
+    <div class="bg-white border border-[#e7e0d1] rounded-[16px] p-4 hover:border-[#1a1a18] transition group">
+      <div class="flex gap-3">
+        <img src="${w.img}" class="w-12 h-12 rounded-full object-cover">
+        <div class="flex-1">
+          <div class="flex items-center gap-2">
+            <div class="font-bold text-[14px]">${w.name}</div>
+            <span class="text-[10px] px-2 py-0.5 bg-[#f0fdf4] border border-[#bbf7d0] rounded-full font-bold text-[#166534]">✓ COOP VERIFIED</span>
+          </div>
+          <div class="text-[11px] text-[#57534e] font-mono">${w.skill} • ${w.exp} • ${w.rating} ★ • ${w.jobs} jobs via coop</div>
+          <div class="mt-2 flex flex-wrap gap-1.5">
+            <span class="text-[10px] px-2 py-1 bg-[#1a1a18] text-white rounded-full">${w.badge}</span>
+            ${w.insurance ? '<span class="text-[10px] px-2 py-1 bg-[#f0fdf4] border rounded-full">Insurance ✓</span>' : '<span class="text-[10px] px-2 py-1 bg-[#fef3c7] border rounded-full">Insurance pending</span>'}
+          </div>
+        </div>
+        <div class="text-right">
+          <div class="font-bold">₹${w.rate}</div>
+          <div class="text-[10px] text-[#a8a29e]">per visit</div>
+        </div>
+      </div>
+      <div class="mt-3 flex gap-2">
+        <button onclick="openBooking('${w.name}')" class="flex-1 bg-[#1a1a18] text-white py-2 rounded-full text-[12px] font-bold group-hover:bg-[#16a34a] transition">BOOK VIA COOPERATIVE</button>
+        <button class="px-3 py-2 border border-[#e7e0d1] rounded-full text-[11px] font-bold">Profile</button>
+      </div>
+      <div class="mt-2 text-[10px] font-mono text-[#a8a29e] text-center">Member of cooperative • Not an employee • Earnings: 88% transparent</div>
+    </div>
+  `).join('');
+}
+
+function openBooking(name) {
+  document.getElementById('bookingPanel').classList.remove('hidden');
+  document.getElementById('bookingPanel').scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+function renderWorkerJobs() {
+  const jobs = [
+    { id:'FSWC-1847', service:'Switchboard repair', area:'Sector 15, Faridabad', amount:500, time:'Today, 2:30 PM', priority:'Coop assigned • Fair distribution' },
+    { id:'FSWC-1848', service:'Fan installation', area:'Greenfields Colony', amount:400, time:'Today, 5:00 PM', priority:'Near you • 1.2km' },
+    { id:'FSWC-1849', service:'Inverter wiring', area:'Ballabgarh', amount:700, time:'Tomorrow, 10 AM', priority:'Skill match • Training bonus' },
+  ];
+  document.getElementById('workerJobs').innerHTML = jobs.map(j => `
+    <div class="border border-[#e7e0d1] rounded-[12px] p-3 flex justify-between items-center hover:border-[#1a1a18] transition">
+      <div>
+        <div class="font-bold text-[13px]">${j.service} • ${j.id}</div>
+        <div class="text-[11px] text-[#57534e] font-mono">${j.area} • ${j.time}</div>
+        <div class="mt-1 text-[10px] px-2 py-0.5 bg-[#f0fdf4] border border-[#bbf7d0] rounded-full inline-block">${j.priority}</div>
+      </div>
+      <div class="text-right">
+        <div class="font-bold">₹${j.amount}</div>
+        <div class="text-[10px] text-[#16a34a] font-bold">You get ₹${Math.round(j.amount*0.88)}</div>
+        <button class="mt-1 bg-[#1a1a18] text-white px-3 py-1 rounded-full text-[11px] font-bold">Accept</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderCoopTable() {
+  const rows = [
+    { name:'Sunil Yadav', skill:'Elec', jpw:'4.5', ver:'✓ Verified', welfare:'Insurance ✓' },
+    { name:'Rekha Devi', skill:'Clean', jpw:'3.9', ver:'✓ Verified', welfare:'Training due' },
+    { name:'Mohan Lal', skill:'Carp', jpw:'1.2 ⚠', ver:'✓ Verified', welfare:'Insurance ✓' },
+    { name:'Aslam Khan', skill:'Plum', jpw:'3.8', ver:'Pending doc', welfare:'Insurance ✓' },
+    { name:'Sita Ram', skill:'Carp', jpw:'1.7 ⚠', ver:'✓ Verified', welfare:'Needs training' },
+  ];
+  document.getElementById('coopWorkerTable').innerHTML = rows.map(r => `
+    <tr class="border-b border-[#f5f5f4] hover:bg-[#fdfbf7]">
+      <td class="py-2.5 font-bold">${r.name}</td><td>${r.skill}</td><td class="${r.jpw.includes('⚠')?'text-[#b45309] font-bold bg-[#fef3c7] px-1 rounded':''}">${r.jpw}</td><td>${r.ver}</td><td>${r.welfare}</td>
+    </tr>
+  `).join('');
+}
+
+// Role Switch
+function switchRole(role) {
+  document.querySelectorAll('.role-view').forEach(el => el.classList.add('hidden'));
+  document.querySelectorAll('.role-tab').forEach(el => {
+    el.classList.remove('bg-white','text-[#1a1a18]');
+    el.classList.add('text-white/70');
+  });
+  document.getElementById(`view-${role}`).classList.remove('hidden');
+  const tab = document.getElementById(`tab-${role}`);
+  tab.classList.add('bg-white','text-[#1a1a18]');
+  tab.classList.remove('text-white/70');
+  if(role==='coop') initCharts();
+}
+
+function initCharts() {
+  const ctx1 = document.getElementById('jobsPerWorkerChart');
+  if(ctx1 && !ctx1.chart) {
+    ctx1.chart = new Chart(ctx1, {
+      type:'bar',
+      data:{
+        labels:['Electricians','Plumbers','Carpenters','Cleaners'],
+        datasets:[{ label:'Avg jobs/worker/day', data:[4.2,3.8,1.7,3.2], backgroundColor:['#16a34a','#1a1a18','#f59e0b','#a8a29e'], borderRadius:8 }]
+      },
+      options:{ plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true, grid:{color:'#f5f5f4'}}, x:{grid:{display:false}}} }
+    });
+  }
+  const ctx2 = document.getElementById('demandChart');
+  if(ctx2 && !ctx2.chart) {
+    ctx2.chart = new Chart(ctx2, {
+      type:'line',
+      data:{
+        labels:['Jan','Feb','Mar','Apr','May','Jun'],
+        datasets:[
+          { label:'Electrical', data:[120,135,150,180,210,252], borderColor:'#16a34a', tension:0.4, fill:false },
+          { label:'Carpentry', data:[80,75,70,68,60,55], borderColor:'#f59e0b', tension:0.4, borderDash:[4,4], fill:false }
+        ]
+      },
+      options:{ plugins:{legend:{position:'bottom', labels:{boxWidth:12, font:{size:10}}}}, scales:{y:{grid:{color:'#f5f5f4'}}, x:{grid:{display:false}}} }
+    });
+  }
+}
+
+// Payment Sliders
+function updatePayment() {
+  const w = parseInt(document.getElementById('slider-worker').value);
+  const c = parseInt(document.getElementById('slider-coop').value);
+  const p = parseInt(document.getElementById('slider-platform').value);
+  const total = w+c+p;
+  // Normalize to 100 if needed (simple)
+  let fw=w, fc=c, fp=p;
+  if(total!==100) {
+    // adjust platform to make 100
+    fp = 100 - w - c;
+    if(fp<1) fp=1;
+    document.getElementById('slider-platform').value = fp;
+  }
+  document.getElementById('val-worker').textContent = w+'%';
+  document.getElementById('val-coop').textContent = c+'%';
+  document.getElementById('val-platform').textContent = fp+'%';
+  document.getElementById('ex-worker').textContent = '₹'+Math.round(500*w/100);
+  document.getElementById('ex-coop').textContent = '₹'+Math.round(500*c/100);
+  document.getElementById('ex-platform').textContent = '₹'+Math.round(500*fp/100);
+  document.getElementById('pay-worker').textContent = '₹'+Math.round(500*w/100);
+  document.getElementById('pay-coop').textContent = '₹'+Math.round(500*c/100);
+  document.getElementById('pay-platform').textContent = '₹'+Math.round(500*fp/100);
+}
+
+document.getElementById('slider-worker')?.addEventListener('input', updatePayment);
+document.getElementById('slider-coop')?.addEventListener('input', updatePayment);
+document.getElementById('slider-platform')?.addEventListener('input', updatePayment);
+
+// Init
+renderWorkers();
+renderWorkerJobs();
+renderCoopTable();
+switchRole('coop');
+updatePayment();
+
+// Service filter
+document.querySelectorAll('.service-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.service-btn').forEach(b=>{b.classList.remove('active','bg-[#1a1a18]','text-white','border-2','border-[#1a1a18]'); b.classList.add('border','border-[#e7e0d1]');});
+    btn.classList.add('active','bg-[#1a1a18]','text-white','border-2','border-[#1a1a18]');
+    btn.classList.remove('border','border-[#e7e0d1]');
+  });
+});
+</script>
+</body>
+</html>

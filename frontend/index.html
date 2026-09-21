@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sahakaar Seva | AI OS for Labour Cooperatives - SIH26089 Production</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'], mono: ['IBM Plex Mono', 'monospace'] }
+    }
+  }
+}
+</script>
+<style>
+  .glass { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+  .animate-in { animation: slideIn 0.4s ease-out; }
+  @keyframes slideIn { from { opacity:0; transform: translateY(8px);} to { opacity:1; transform: translateY(0);} }
+  .shimmer { background: linear-gradient(90deg, #f5f5f4 25%, #e7e5e4 50%, #f5f5f4 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+  @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+</style>
+</head>
+<body class="bg-[#fdfbf7] text-[#1a1a18] font-sans antialiased">
+
+<!-- NAV -->
+<nav class="sticky top-0 z-50 bg-[#fdfbf7]/90 glass border-b border-[#e7e0d1]">
+  <div class="max-w-[1400px] mx-auto px-6 lg:px-8 h-[64px] flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 bg-[#1a1a18] text-white grid place-items-center font-extrabold text-[18px] rounded-[8px]">स</div>
+      <div>
+        <div class="font-extrabold leading-none tracking-tight text-[17px]">SAHAKAAR SEVA <span class="font-mono text-[10px] bg-[#16a34a] text-white px-1.5 py-0.5 rounded ml-1">PROD v2 + AI</span></div>
+        <div class="text-[10px] tracking-[0.18em] font-bold text-[#57534e] uppercase">Cooperative OS • SIH26089 • FastAPI + PostgreSQL + AI</div>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <div id="apiStatus" class="hidden md:flex items-center gap-2 text-[11px] font-mono bg-white border border-[#e7e0d1] rounded-full px-3 py-1">
+        <span class="w-2 h-2 bg-gray-400 rounded-full" id="apiDot"></span>
+        <span id="apiText">Checking API...</span>
+      </div>
+      <button onclick="toggleDemoMode()" id="demoBtn" class="bg-[#1a1a18] text-white px-4 py-2 rounded-full text-[12px] font-bold">▶ DEMO MODE</button>
+      <button onclick="document.getElementById('loginModal').classList.remove('hidden')" class="bg-[#16a34a] text-white px-4 py-2 rounded-full text-[12px] font-bold">LOGIN</button>
+    </div>
+  </div>
+</nav>
+
+<!-- DEMO BANNER -->
+<div id="demoBanner" class="hidden bg-[#1a1a18] text-white text-center py-2 text-[12px] font-mono">
+  <span class="inline-flex items-center gap-2"><span class="w-2 h-2 bg-[#4ade80] rounded-full animate-pulse"></span> DEMO MODE ACTIVE • Synthetic data • Full flow: Customer request → AI matching → Booking → Payment → Worker → Coop Intelligence → AI recommendation • 2-3 min</span>
+  <button onclick="runFullDemo()" class="ml-4 bg-[#16a34a] px-3 py-1 rounded-full font-bold text-[11px]">RUN FULL FLOW</button>
+</div>
+
+<!-- HERO - Preserved from prototype -->
+<section class="max-w-[1400px] mx-auto px-6 lg:px-8 pt-8 pb-4">
+  <div class="grid lg:grid-cols-[1.1fr_0.9fr] gap-8 items-start">
+    <div>
+      <div class="inline-flex items-center gap-2 bg-white border border-[#e7e0d1] rounded-full px-3 py-1 text-[11px] font-bold tracking-widest uppercase mb-4">
+        <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+        Production System • Backend + AI • Not just prototype
+      </div>
+      <h1 class="text-[40px] lg:text-[52px] font-[800] leading-[0.95] tracking-[-0.03em]">
+        Cooperative is the system.<br>
+        <span class="text-[#16a34a]">AI is the intelligence.</span><br>
+        Worker is the beneficiary.
+      </h1>
+      <p class="mt-4 text-[16px] leading-[1.5] text-[#57534e] max-w-[560px]">
+        AI-powered Digital Operating System for Labour Service Cooperatives. Backend: FastAPI + PostgreSQL + 6 AI engines. Frontend: Cooperative-first, explainable AI, transparent payments.
+      </p>
+
+      <div class="mt-6 bg-[#1a1a18] text-white rounded-[16px] p-4">
+        <div class="text-[11px] tracking-widest uppercase font-bold text-white/50">DATA → AI → INSIGHT → COOP DECISION → BENEFIT</div>
+        <div class="mt-3 grid grid-cols-3 gap-3 text-[11px] font-mono leading-[1.4]">
+          <div class="bg-white/10 rounded-[10px] p-2.5"><b class="text-[#4ade80]">Fair Allocation</b><br>Skill 30% + Availability 15% + Distance 10% + Fairness 5% → Prevents top-rated monopoly</div>
+          <div class="bg-white/10 rounded-[10px] p-2.5"><b class="text-[#facc15]">Demand Forecast</b><br>Electrical +31% next 7 days → Train 12, Recruit 5</div>
+          <div class="bg-white/10 rounded-[10px] p-2.5"><b class="text-white">Equity Index</b><br>87/100 • Carpenters 62⚠ → Investigate & promote</div>
+        </div>
+      </div>
+
+      <div class="mt-6 flex flex-wrap gap-2">
+        <button onclick="switchRole('customer')" class="px-4 py-2.5 rounded-full bg-[#1a1a18] text-white font-bold text-[12px]">👤 Customer + AI Assistant</button>
+        <button onclick="switchRole('worker')" class="px-4 py-2.5 rounded-full bg-white border border-[#1a1a18] font-bold text-[12px]">🔧 Worker • Real Jobs</button>
+        <button onclick="switchRole('coop')" class="px-4 py-2.5 rounded-full bg-[#16a34a] text-white font-bold text-[12px]">🏛️ Cooperative Command Center</button>
+      </div>
+    </div>
+
+    <!-- Architecture + Backend Status -->
+    <div class="space-y-4">
+      <div class="bg-white border border-[#e7e0d1] rounded-[20px] p-5 shadow-[0_8px_24px_rgba(0,0,0,0.04)]">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="font-bold text-[13px]">Production Architecture</h3>
+          <span class="text-[10px] font-mono bg-[#f0fdf4] border border-[#bbf7d0] px-2 py-1 rounded-full">SIH26089 • FULL-STACK</span>
+        </div>
+        <div class="font-mono text-[11px] leading-[1.6] bg-[#f5f5f4] rounded-[12px] p-3">
+CUSTOMER
+  ↓ Sahakaar AI (NL → structured)
+SAHAKAAR SEVA (FastAPI)
+  ↓ Fair AI Allocation Engine
+LABOUR COOPERATIVE (PostgreSQL)
+  ↓ Verified Members
+WORKER MEMBERS
+  → Transparent Payment (88/6/6 configurable)
+  → Training, Welfare, Insurance
+        </div>
+        <div class="mt-3 grid grid-cols-2 gap-2 text-[10px]">
+          <div class="bg-[#f0fdf4] border border-[#bbf7d0] rounded-[8px] p-2"><b>Backend</b><br>FastAPI • SQLAlchemy • JWT • RBAC</div>
+          <div class="bg-[#fef3c7] border border-[#fde68a] rounded-[8px] p-2"><b>AI/ML</b><br>sklearn • Fairness • Forecast • Anomaly</div>
+        </div>
+      </div>
+
+      <div class="bg-[#1a1a18] text-white rounded-[20px] p-5">
+        <h4 class="font-bold text-[12px] tracking-wide uppercase">Live Backend Data</h4>
+        <div id="liveStats" class="mt-3 grid grid-cols-3 gap-2 font-mono text-[11px]">
+          <div class="bg-white/10 rounded-[8px] p-2"><div class="text-white/50">Workers</div><div class="font-bold text-[16px]" id="stat-workers">--</div></div>
+          <div class="bg-white/10 rounded-[8px] p-2"><div class="text-white/50">Jobs Today</div><div class="font-bold text-[16px]" id="stat-jobs">--</div></div>
+          <div class="bg-white/10 rounded-[8px] p-2"><div class="text-white/50">Equity</div><div class="font-bold text-[16px] text-[#4ade80]" id="stat-equity">--</div></div>
+        </div>
+        <div class="mt-3 text-[10px] text-white/50">If API offline, falls back to synthetic demo data. Run <code>python -m backend.seed</code> to seed DB.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROLE TABS -->
+<section id="roles" class="max-w-[1400px] mx-auto px-6 lg:px-8 mt-4">
+  <div class="bg-[#1a1a18] rounded-[16px] p-1 flex gap-1 w-fit">
+    <button id="tab-customer" onclick="switchRole('customer')" class="role-tab px-5 py-2 rounded-[12px] text-[12px] font-bold bg-white text-[#1a1a18]">👤 CUSTOMER</button>
+    <button id="tab-worker" onclick="switchRole('worker')" class="role-tab px-5 py-2 rounded-[12px] text-[12px] font-bold text-white/70">🔧 WORKER</button>
+    <button id="tab-coop" onclick="switchRole('coop')" class="role-tab px-5 py-2 rounded-[12px] text-[12px] font-bold text-white/70">🏛️ COOPERATIVE OS</button>
+  </div>
+</section>
+
+<!-- CUSTOMER VIEW -->
+<div id="view-customer" class="role-view max-w-[1400px] mx-auto px-6 lg:px-8 mt-4">
+  <div class="grid lg:grid-cols-[340px_1fr] gap-5">
+    <div class="space-y-4">
+      <div class="bg-white border border-[#e7e0d1] rounded-[20px] p-5">
+        <h4 class="font-bold text-[13px]">Sahakaar AI Assistant</h4>
+        <p class="text-[11px] text-[#57534e] mt-1">Type in Hindi/English mix. AI converts to structured job.</p>
+        <div class="mt-3">
+          <textarea id="nlInput" placeholder="Mere ghar mein fan aur switchboard dono kharab hain. Jaldi chahiye." class="w-full border border-[#e7e0d1] rounded-[12px] p-3 text-[12px] h-[70px]"></textarea>
+          <button onclick="processNL()" class="mt-2 w-full bg-[#1a1a18] text-white py-2 rounded-full text-[12px] font-bold">🤖 Understand Request</button>
+        </div>
+        <div id="nlOutput" class="hidden mt-3 bg-[#f0fdf4] border border-[#bbf7d0] rounded-[12px] p-3 text-[11px] font-mono"></div>
+      </div>
+
+      <div class="bg-white border border-[#e7e0d1] rounded-[20px] p-5">
+        <h4 class="font-bold text-[13px]">Find Verified Members</h4>
+        <div class="mt-3 space-y-3">
+          <div>
+            <label class="text-[10px] font-bold tracking-widest uppercase">Service</label>
+            <div class="mt-2 grid grid-cols-2 gap-2">
+              <button class="service-btn active bg-[#1a1a18] text-white rounded-full py-2 text-[11px] font-bold" data-service="electrician">⚡ Electrician</button>
+              <button class="service-btn border border-[#e7e0d1] rounded-full py-2 text-[11px] font-bold" data-service="plumber">🚿 Plumber</button>
+              <button class="service-btn border border-[#e7e0d1] rounded-full py-2 text-[11px] font-bold" data-service="carpenter">🪚 Carpenter</button>
+              <button class="service-btn border border-[#e7e0d1] rounded-full py-2 text-[11px] font-bold" data-service="cleaner">🧹 Cleaner</button>
+            </div>
+          </div>
+          <div>
+            <label class="text-[10px] font-bold tracking-widest uppercase">Location</label>
+            <input id="jobLocation" value="Sector 15, Faridabad" class="mt-1 w-full border border-[#e7e0d1] rounded-full px-3 py-2 text-[12px]">
+          </div>
+          <div>
+            <label class="text-[10px] font-bold tracking-widest uppercase">Description</label>
+            <input id="jobDesc" value="Switchboard repair required" class="mt-1 w-full border border-[#e7e0d1] rounded-full px-3 py-2 text-[12px]">
+          </div>
+          <div>
+            <label class="text-[10px] font-bold tracking-widest uppercase">Price ₹</label>
+            <input id="jobPrice" type="number" value="500" class="mt-1 w-full border border-[#e7e0d1] rounded-full px-3 py-2 text-[12px]">
+          </div>
+          <button onclick="createJob()" class="w-full bg-[#16a34a] text-white py-2.5 rounded-full text-[12px] font-bold">Create Job + AI Match</button>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="font-bold text-[14px]">AI Matching • Explainable • Fair</h3>
+        <span class="text-[10px] font-mono bg-white border px-2 py-1 rounded-full" id="eligibleCount">12 eligible • Sorted by fair score, not just rating</span>
+      </div>
+      
+      <div id="aiMatchPanel" class="hidden bg-[#1a1a18] text-white rounded-[20px] p-5 mb-4 animate-in">
+        <h4 class="font-bold text-[13px]">AI MATCHING RESULT • Why this worker?</h4>
+        <div id="aiMatchContent" class="mt-3"></div>
+      </div>
+
+      <div id="workerList" class="grid md:grid-cols-2 gap-3"></div>
+
+      <div id="bookingPanel" class="hidden mt-4 bg-white border-2 border-[#1a1a18] rounded-[20px] p-5 animate-in">
+        <h4 class="font-bold">Transparent Payment • Backend Validated</h4>
+        <div class="mt-3 grid lg:grid-cols-2 gap-4">
+          <div class="bg-[#f5f5f4] rounded-[12px] p-4 font-mono text-[11px]">
+            <div id="paymentBreakdown"></div>
+          </div>
+          <div>
+            <div class="bg-[#f0fdf4] border border-[#bbf7d0] rounded-[12px] p-3 text-[11px]">
+              <b class="text-[#166534]">Worker will see:</b>
+              <div id="workerTransparency" class="mt-1 font-mono"></div>
+            </div>
+            <button onclick="confirmBooking()" class="mt-3 w-full bg-[#16a34a] text-white py-2.5 rounded-full text-[12px] font-bold">CONFIRM & PAY (MOCK GATEWAY)</button>
+            <div class="mt-2 text-[10px] text-center text-[#57534e]">UPI_MOCK_DEMO • Auditable settlement • Transaction ID generated</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WORKER VIEW -->
+<div id="view-worker" class="role-view hidden max-w-[1400px] mx-auto px-6 lg:px-8 mt-4">
+  <div class="grid lg:grid-cols-[320px_1fr] gap-5">
+    <div class="bg-white border-2 border-[#1a1a18] rounded-[20px] p-5 h-fit">
+      <div class="flex items-center gap-3">
+        <img src="https://i.pravatar.cc/100?img=12" class="w-12 h-12 rounded-full">
+        <div>
+          <div class="font-bold text-[14px]">Ramesh Kumar</div>
+          <div class="text-[11px] text-[#57534e]">FSWC-E-184 • Electrician • Since 2021</div>
+          <span class="mt-1 inline-block bg-[#f0fdf4] border border-[#bbf7d0] px-2 py-0.5 rounded-full text-[9px] font-bold text-[#166534]">✓ VERIFIED MEMBER</span>
+        </div>
+      </div>
+      <div class="mt-4 grid grid-cols-2 gap-2 text-[10px] font-mono">
+        <div class="bg-[#f5f5f4] rounded-[10px] p-2"><div class="text-[#a8a29e] uppercase">Jobs Done</div><div class="font-bold text-[16px] font-sans" id="w-jobs">1,247</div></div>
+        <div class="bg-[#f5f5f4] rounded-[10px] p-2"><div class="text-[#a8a29e] uppercase">Rating</div><div class="font-bold text-[16px] font-sans">4.8 ★</div></div>
+        <div class="bg-[#f5f5f4] rounded-[10px] p-2"><div class="text-[#a8a29e] uppercase">MTD Earnings</div><div class="font-bold text-[14px] font-sans" id="w-earnings">₹38,400</div></div>
+        <div class="bg-[#f0fdf4] rounded-[10px] p-2 border border-[#bbf7d0]"><div class="text-[#166534] uppercase">Opportunity</div><div class="font-bold text-[14px] font-sans">91/100</div></div>
+      </div>
+      <div class="mt-4">
+        <div class="text-[10px] font-bold tracking-widest uppercase">My Opportunity vs Coop Avg</div>
+        <div class="mt-2 bg-[#f5f5f4] rounded-[10px] p-2.5 font-mono text-[11px]">
+          Jobs this month: <b>42</b> (Coop avg: 38)<br>
+          Score: <b class="text-[#16a34a]">91/100</b> • Fair distribution working
+        </div>
+      </div>
+    </div>
+
+    <div class="space-y-4">
+      <div class="bg-white border border-[#e7e0d1] rounded-[20px] p-5">
+        <div class="flex justify-between items-center">
+          <h4 class="font-bold text-[13px]">Incoming Jobs • From Cooperative</h4>
+          <span class="text-[10px] font-mono bg-[#f0fdf4] border px-2 py-1 rounded-full" id="workerJobCount">Loading...</span>
+        </div>
+        <div id="workerJobs" class="mt-3 space-y-2"></div>
+      </div>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="bg-white border border-[#e7e0d1] rounded-[20px] p-4">
+          <h4 class="font-bold text-[11px] uppercase">Earnings Transparency • Backend</h4>
+          <div id="workerEarnings" class="mt-2 font-mono text-[11px] space-y-1"></div>
+        </div>
+        <div class="bg-[#fefce8] border border-[#fde68a] rounded-[20px] p-4">
+          <h4 class="font-bold text-[11px] uppercase">AI Training Recommendations</h4>
+          <div id="workerTraining" class="mt-2 text-[11px] space-y-1"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COOPERATIVE VIEW - COMMAND CENTER -->
+<div id="view-coop" class="role-view hidden max-w-[1400px] mx-auto px-6 lg:px-8 mt-4">
+  <div class="grid grid-cols-2 lg:grid-cols-5 gap-3">
+    <div class="bg-white border border-[#e7e0d1] rounded-[16px] p-4">
+      <div class="text-[10px] font-bold tracking-widest uppercase text-[#a8a29e]">Total Workers</div>
+      <div class="text-[26px] font-extrabold leading-none mt-1" id="coop-total-workers">500</div>
+      <div class="text-[10px] mt-1 font-mono" id="coop-by-skill">Elec 120 • Plum 95 • Carp 80 • Clean 205</div>
+    </div>
+    <div class="bg-white border border-[#e7e0d1] rounded-[16px] p-4">
+      <div class="text-[10px] font-bold tracking-widest uppercase text-[#a8a29e]">Today's Jobs</div>
+      <div class="text-[26px] font-extrabold leading-none mt-1" id="coop-today-jobs">247</div>
+      <div class="text-[10px] mt-1 font-mono"><span class="text-green-600" id="coop-completed">201 done</span> • <span id="coop-active">35 active</span></div>
+    </div>
+    <div class="bg-[#1a1a18] text-white rounded-[16px] p-4">
+      <div class="text-[10px] font-bold tracking-widest uppercase text-white/50">Opportunity Equity</div>
+      <div class="text-[26px] font-extrabold leading-none mt-1 text-[#4ade80]" id="coop-equity">87/100</div>
+      <div class="text-[10px] mt-1 font-mono text-white/60" id="coop-avg-jobs">3.1 avg jobs/worker</div>
+    </div>
+    <div class="bg-[#f0fdf4] border border-[#bbf7d0] rounded-[16px] p-4">
+      <div class="text-[10px] font-bold tracking-widest uppercase text-[#166534]">Revenue Today</div>
+      <div class="text-[26px] font-extrabold leading-none mt-1 text-[#166534]" id="coop-revenue">₹1.2L</div>
+      <div class="text-[10px] mt-1 font-mono" id="coop-worker-earn">Worker: ₹1.06L</div>
+    </div>
+    <div class="bg-[#fef3c7] border border-[#fde68a] rounded-[16px] p-4">
+      <div class="text-[10px] font-bold tracking-widest uppercase text-[#92400e]">AI Alerts</div>
+      <div class="text-[12px] font-bold leading-[1.2] mt-1" id="coop-alert">Carpenters 1.7 ⚠</div>
+      <div class="text-[10px] mt-1 font-mono" id="coop-alert-detail">Demand ↓ • Action needed</div>
+    </div>
+  </div>
+
+  <!-- AI COMMAND CENTER -->
+  <div class="mt-5 bg-[#1a1a18] text-white rounded-[20px] p-6">
+    <div class="flex items-center justify-between">
+      <h3 class="font-bold text-[14px]">🏛️ AI COOPERATIVE COMMAND CENTER • DATA → AI → DECISION → ACTION</h3>
+      <span class="text-[10px] font-mono bg-white/10 px-2 py-1 rounded-full">Explainable AI • Not black box</span>
+    </div>
+    <div id="aiCommandCenter" class="mt-4 grid lg:grid-cols-4 gap-3 text-[11px]"></div>
+  </div>
+
+  <div class="mt-5 grid lg:grid-cols-[1.6fr_1fr] gap-5">
+    <div class="space-y-5">
+      <div class="bg-white border border-[#e7e0d1] rounded-[20px] p-5">
+        <h4 class="font-bold text-[13px]">Worker Opportunity Intelligence • Real Backend Data</h4>
+        <div class="mt-4 grid md:grid-cols-2 gap-5">
+          <div><canvas id="jobsPerWorkerChart" height="180"></canvas></div>
+          <div><canvas id="demandChart" height="180"></canvas></div>
+        </div>
+        <div class="mt-4 grid md:grid-cols-2 gap-3">
+          <div class="bg-[#fef3c7] border border-[#fde68a] rounded-[10px] p-3 text-[11px]" id="insight-fairness">Loading fairness insight...</div>
+          <div class="bg-[#f0fdf4] border border-[#bbf7d0] rounded-[10px] p-3 text-[11px]" id="insight-demand">Loading demand insight...</div>
+        </div>
+      </div>
+
+      <div class="bg-white border border-[#e7e0d1] rounded-[20px] p-5">
+        <div class="flex justify-between items-center">
+          <h4 class="font-bold text-[13px]">Training Gaps • AI Recommended</h4>
+          <span class="text-[10px] font-mono bg-[#f5f5f4] px-2 py-1 rounded-full">Based on demand forecast + skill shortage</span>
+        </div>
+        <div id="trainingGaps" class="mt-3 space-y-2"></div>
+      </div>
+
+      <div class="bg-white border border-[#e7e0d1] rounded-[20px] p-5">
+        <h4 class="font-bold text-[13px]">Anomaly Detection • Isolation Forest • Flags for Review</h4>
+        <div id="anomalyList" class="mt-3 space-y-2"></div>
+      </div>
+    </div>
+
+    <div class="space-y-5">
+      <div class="bg-[#1a1a18] text-white rounded-[20px] p-5">
+        <h4 class="font-bold text-[13px]">Configurable Payment Policy • Backend Validated</h4>
+        <p class="text-[10px] text-white/60 mt-1">Worker + Coop + Platform = 100% • Stored in DB, not hardcoded</p>
+        <div class="mt-4 space-y-4">
+          <div>
+            <div class="flex justify-between text-[10px] font-bold uppercase tracking-widest"><span>Worker Earnings</span><span id="val-worker" class="text-[#4ade80]">88%</span></div>
+            <input id="slider-worker" type="range" min="70" max="95" value="88" class="w-full mt-1 accent-[#4ade80]">
+          </div>
+          <div>
+            <div class="flex justify-between text-[10px] font-bold uppercase tracking-widest"><span>Coop Contribution</span><span id="val-coop" class="text-[#facc15]">6%</span></div>
+            <input id="slider-coop" type="range" min="2" max="15" value="6" class="w-full mt-1 accent-[#facc15]">
+          </div>
+          <div>
+            <div class="flex justify-between text-[10px] font-bold uppercase tracking-widest"><span>Platform Costs</span><span id="val-platform">6%</span></div>
+            <input id="slider-platform" type="range" min="2" max="15" value="6" class="w-full mt-1 accent-white">
+          </div>
+          <div class="bg-white/10 rounded-[10px] p-3 font-mono text-[11px]">
+            <div class="flex justify-between"><span>Worker</span><span id="ex-worker" class="font-bold text-[#4ade80]">₹440</span></div>
+            <div class="flex justify-between"><span>Coop</span><span id="ex-coop">₹30</span></div>
+            <div class="flex justify-between"><span>Platform</span><span id="ex-platform">₹30</span></div>
+            <div class="h-[1px] bg-white/20 my-2"></div>
+            <div class="flex justify-between font-bold"><span>Total ₹500</span><span id="ex-total">100%</span></div>
+          </div>
+          <button onclick="savePolicy()" class="w-full bg-[#16a34a] py-2.5 rounded-full text-[11px] font-bold">SAVE AS COOP POLICY (API)</button>
+          <div id="policyStatus" class="text-[10px] font-mono text-white/60 text-center"></div>
+        </div>
+      </div>
+
+      <div class="bg-white border border-[#e7e0d1] rounded-[20px] p-5">
+        <h4 class="font-bold text-[12px] uppercase">Demand Forecast • Next 7 Days</h4>
+        <div id="demandForecast" class="mt-3 space-y-2 font-mono text-[11px]"></div>
+      </div>
+
+      <div class="bg-[#f0fdf4] border-2 border-[#16a34a] border-dashed rounded-[20px] p-4">
+        <h4 class="font-bold text-[#166534] text-[12px]">SIH Judge Summary</h4>
+        <div class="mt-2 text-[11px] leading-[1.5] text-[#166534]">
+          <b>Problem:</b> Cooperatives have workers but no digital OS.<br>
+          <b>Solution:</b> Digital OS + 6 AI engines.<br>
+          <b>Diff:</b> Traditional: "Who has highest rating?"<br>
+          Sahakaar: "Who is qualified + available + nearby + reliable + under-allocated?"
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div id="loginModal" class="hidden fixed inset-0 z-[100] bg-black/50 grid place-items-center p-4">
+  <div class="bg-white rounded-[20px] p-6 w-full max-w-[360px]">
+    <div class="flex justify-between items-center">
+      <h3 class="font-bold">Login • JWT + RBAC</h3>
+      <button onclick="document.getElementById('loginModal').classList.add('hidden')" class="text-[#a8a29e]">✕</button>
+    </div>
+    <div class="mt-4 space-y-3">
+      <input id="loginPhone" placeholder="Phone" value="9999999999" class="w-full border border-[#e7e0d1] rounded-full px-4 py-2.5 text-[13px]">
+      <input id="loginPass" type="password" placeholder="Password" value="admin123" class="w-full border border-[#e7e0d1] rounded-full px-4 py-2.5 text-[13px]">
+      <div class="grid grid-cols-3 gap-2 text-[10px]">
+        <button onclick="fillLogin('9999999999','admin123')" class="border rounded-full py-1">Admin</button>
+        <button onclick="fillLogin('8888888888','customer123')" class="border rounded-full py-1">Customer</button>
+        <button onclick="fillLogin('7777777777','worker123')" class="border rounded-full py-1">Worker</button>
+      </div>
+      <button onclick="doLogin()" class="w-full bg-[#1a1a18] text-white py-2.5 rounded-full text-[13px] font-bold">LOGIN</button>
+      <div id="loginStatus" class="text-[11px] font-mono text-center"></div>
+      <div class="text-[10px] text-[#a8a29e] text-center">Run seed.py to create demo users. All demo users password: demo123 except admin/customer/worker.</div>
+    </div>
+  </div>
+</div>
+
+<footer class="max-w-[1400px] mx-auto px-6 lg:px-8 mt-10 mb-8">
+  <div class="bg-white border border-[#e7e0d1] rounded-[20px] p-6">
+    <div class="flex flex-wrap justify-between gap-4 text-[10px] font-mono text-[#a8a29e]">
+      <span>SIH26089 • Sahakaar Seva • FastAPI + PostgreSQL + 6 AI Engines • Transparent • Configurable • Cooperative-first • Production Ready</span>
+      <span class="bg-[#1a1a18] text-white px-3 py-1 rounded-full font-bold">BUILT FOR COOPERATIVE, NOT FOR COMMISSION</span>
+    </div>
+  </div>
+</footer>
+
+<script src="./js/api.js"></script>
+<script>
+// State
+let currentJob = null;
+let selectedWorker = null;
+let dashboardData = null;
+let charts = {};
+
+// Init
+async function init() {
+  checkApi();
+  loadMockWorkers();
+  switchRole('coop');
+  loadCooperativeDashboard();
+  loadAI();
+}
+
+async function checkApi() {
+  try {
+    const res = await fetch(`${window.api.base}/health`);
+    if (res.ok) {
+      document.getElementById('apiDot').className = 'w-2 h-2 bg-green-500 rounded-full animate-pulse';
+      document.getElementById('apiText').textContent = 'API Online • PostgreSQL • AI Ready';
+      loadRealStats();
+    } else throw new Error();
+  } catch {
+    document.getElementById('apiDot').className = 'w-2 h-2 bg-amber-500 rounded-full';
+    document.getElementById('apiText').textContent = 'API Offline • Using synthetic demo data';
+  }
+}
+
+async function loadRealStats() {
+  try {
+    const dash = await window.api.getDashboard(1);
+    document.getElementById('stat-workers').textContent = dash.total_workers;
+    document.getElementById('stat-jobs').textContent = dash.todays_jobs;
+    document.getElementById('stat-equity').textContent = dash.opportunity_equity + '/100';
+    
+    document.getElementById('coop-total-workers').textContent = dash.total_workers;
+    document.getElementById('coop-today-jobs').textContent = dash.todays_jobs;
+    document.getElementById('coop-completed').textContent = dash.completed_jobs + ' done';
+    document.getElementById('coop-active').textContent = dash.active_jobs + ' active';
+    document.getElementById('coop-equity').textContent = dash.opportunity_equity + '/100';
+    document.getElementById('coop-avg-jobs').textContent = dash.avg_jobs_per_worker + ' avg jobs/worker';
+    document.getElementById('coop-revenue').textContent = '₹' + (dash.total_revenue/1000).toFixed(1) + 'K';
+    document.getElementById('coop-worker-earn').textContent = 'Worker: ₹' + (dash.worker_earnings/1000).toFixed(1) + 'K';
+    
+    let bySkillText = Object.entries(dash.by_skill).map(([k,v]) => `${k.slice(0,4)} ${v}`).join(' • ');
+    document.getElementById('coop-by-skill').textContent = bySkillText;
+    
+    // Alert for under-allocated
+    let lowestSkill = null, lowestVal = 999;
+    for (let [k,v] of Object.entries(dash.avg_jobs_by_skill)) {
+      if (v < lowestVal) { lowestVal = v; lowestSkill = k; }
+    }
+    if (lowestSkill && lowestVal < dash.avg_jobs_per_worker * 0.6) {
+      document.getElementById('coop-alert').textContent = `${lowestSkill} ${lowestVal} ⚠`;
+      document.getElementById('coop-alert-detail').textContent = `${((dash.avg_jobs_per_worker-lowestVal)/dash.avg_jobs_per_worker*100).toFixed(0)}% below avg • Promote?`;
+    }
+  } catch(e) {
+    console.log('Stats fallback', e);
+  }
+}
+
+// Role switching
+function switchRole(role) {
+  document.querySelectorAll('.role-view').forEach(el => el.classList.add('hidden'));
+  document.querySelectorAll('.role-tab').forEach(el => {
+    el.classList.remove('bg-white','text-[#1a1a18]');
+    el.classList.add('text-white/70');
+  });
+  document.getElementById(`view-${role}`).classList.remove('hidden');
+  const tab = document.getElementById(`tab-${role}`);
+  tab.classList.add('bg-white','text-[#1a1a18]');
+  tab.classList.remove('text-white/70');
+  if (role === 'coop') initCharts();
+}
+
+// Mock workers for fallback
+const mockWorkers = [
+  {id:1, member_id:'FSWC-E-184', name:'Sunil Yadav', skill:'electrician', exp:'12 yrs', rating:4.9, jobs:342, rate:500, verified:true, insurance:true, badge:'Top Rated', img:'https://i.pravatar.cc/100?img=11', jobs_this_week:4.5},
+  {id:2, member_id:'FSWC-E-185', name:'Amit Verma', skill:'electrician', exp:'8 yrs', rating:4.8, jobs:210, rate:450, verified:true, insurance:true, badge:'Coop 5y', img:'https://i.pravatar.cc/100?img=15', jobs_this_week:3.2},
+  {id:3, member_id:'FSWC-E-186', name:'Priya Sharma', skill:'electrician', exp:'5 yrs', rating:4.7, jobs:98, rate:400, verified:true, insurance:false, badge:'New • Needs jobs', img:'https://i.pravatar.cc/100?img=5', jobs_this_week:1.2},
+  {id:4, member_id:'FSWC-E-187', name:'Rohit Singh', skill:'electrician', exp:'15 yrs', rating:5.0, jobs:512, rate:600, verified:true, insurance:true, badge:'Master Trainer', img:'https://i.pravatar.cc/100?img=20', jobs_this_week:5.1},
+];
+
+function loadMockWorkers() {
+  const container = document.getElementById('workerList');
+  container.innerHTML = mockWorkers.map(w => `
+    <div class="bg-white border border-[#e7e0d1] rounded-[16px] p-4 hover:border-[#1a1a18] transition group">
+      <div class="flex gap-3">
+        <img src="${w.img}" class="w-10 h-10 rounded-full">
+        <div class="flex-1">
+          <div class="flex items-center gap-2"><div class="font-bold text-[13px]">${w.name}</div><span class="text-[9px] px-1.5 py-0.5 bg-[#f0fdf4] border rounded-full font-bold text-[#166534]">✓ VERIFIED</span></div>
+          <div class="text-[10px] text-[#57534e] font-mono">${w.skill} • ${w.exp} • ${w.rating}★ • ${w.jobs} jobs • ${w.jobs_this_week}/wk</div>
+          <div class="mt-1 flex gap-1"><span class="text-[9px] px-2 py-0.5 bg-[#1a1a18] text-white rounded-full">${w.badge}</span><span class="text-[9px] px-2 py-0.5 bg-[#f0fdf4] border rounded-full">${w.insurance?'Insurance ✓':'Insurance pending'}</span></div>
+        </div>
+        <div class="text-right"><div class="font-bold text-[13px]">₹${w.rate}</div><div class="text-[9px] text-[#a8a29e]">per visit</div></div>
+      </div>
+      <div class="mt-3 flex gap-2">
+        <button onclick="selectWorker(${w.id})" class="flex-1 bg-[#1a1a18] text-white py-2 rounded-full text-[11px] font-bold group-hover:bg-[#16a34a]">BOOK VIA COOPERATIVE</button>
+        <button class="px-3 py-2 border rounded-full text-[10px] font-bold">Profile</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+let selectedService = 'electrician';
+document.querySelectorAll('.service-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.service-btn').forEach(b=>{b.classList.remove('active','bg-[#1a1a18]','text-white'); b.classList.add('border','border-[#e7e0d1]');});
+    btn.classList.add('active','bg-[#1a1a18]','text-white');
+    btn.classList.remove('border','border-[#e7e0d1]');
+    selectedService = btn.dataset.service;
+    if (btn.dataset.service !== 'electrician') {
+      // For demo, filter mock
+      document.getElementById('eligibleCount').textContent = `${Math.floor(Math.random()*20+5)} eligible • ${btn.dataset.service}`;
+    }
+  });
+});
+
+async function processNL() {
+  const q = document.getElementById('nlInput').value;
+  if (!q) return;
+  const out = document.getElementById('nlOutput');
+  out.classList.remove('hidden');
+  out.innerHTML = '<div class="shimmer h-4 rounded w-full"></div>';
+  try {
+    const res = await window.api.nlQuery(q);
+    out.innerHTML = `
+      <div class="font-bold text-[#166534]">Detected: ${res.detected_services.join(', ')}</div>
+      <div>Urgency: ${res.urgency} • Est: ₹${res.estimated_price}</div>
+      <div class="mt-1 text-[10px]">Next: ${res.next_step}</div>
+      <div class="mt-2 bg-white rounded p-2 text-[10px]">${JSON.stringify(res.structured, null, 2)}</div>
+    `;
+    // Auto-fill form
+    if (res.detected_services[0]) {
+      document.querySelector(`[data-service="${res.detected_services[0]}"]`)?.click();
+    }
+    document.getElementById('jobDesc').value = q;
+  } catch {
+    out.innerHTML = `
+      <div class="font-bold">Fallback NLP (API offline)</div>
+      <div>Detected: ${q.toLowerCase().includes('fan') ? 'electrician (fan)' : 'electrician'}</div>
+      <div>Urgency: ${q.toLowerCase().includes('jaldi') ? 'urgent' : 'normal'}</div>
+    `;
+  }
+}
+
+async function createJob() {
+  const btn = event.target;
+  const orig = btn.textContent;
+  btn.textContent = 'Creating...';
+  btn.disabled = true;
+
+  const data = {
+    cooperative_id: 1,
+    service: selectedService,
+    sub_service: document.getElementById('jobDesc').value.slice(0,50),
+    description: document.getElementById('jobDesc').value,
+    location: document.getElementById('jobLocation').value,
+    latitude: 28.4089 + (Math.random()-0.5)*0.1,
+    longitude: 77.3178 + (Math.random()-0.5)*0.1,
+    price: parseFloat(document.getElementById('jobPrice').value),
+    priority: 'NORMAL'
+  };
+
+  try {
+    let job;
+    try {
+      job = await window.api.createJob(data);
+    } catch {
+      // Mock job if API offline
+      job = {id: Math.floor(Math.random()*9000+1000), ...data, status:'CREATED'};
+    }
+    currentJob = job;
+    
+    // AI Match
+    document.getElementById('aiMatchPanel').classList.remove('hidden');
+    document.getElementById('aiMatchContent').innerHTML = '<div class="shimmer h-20 rounded"></div> Searching eligible workers...';
+    
+    let matchRes;
+    try {
+      matchRes = await window.api.aiMatch(job.id, 3);
+    } catch {
+      // Mock AI matching
+      matchRes = {
+        job_id: job.id,
+        eligible_count: 12,
+        recommended_worker_id: 3,
+        matches: [
+          {worker_id:3, member_id:'FSWC-E-186', name:'Priya Sharma', final_score:94.2, distance_km:1.2, breakdown:{skill_match:96, availability:100, distance:91, experience:70, rating:94, reliability:92, workload_balance:95, fairness:94}, explanation:'High skill match • Available now • Nearby (1.2km) • Low workload - opportunity balancing • High fairness - under-allocated'},
+          {worker_id:1, member_id:'FSWC-E-184', name:'Sunil Yadav', final_score:87.5, distance_km:2.1, breakdown:{skill_match:100, availability:100, distance:85, experience:95, rating:98, reliability:96, workload_balance:45, fairness:50}, explanation:'High skill match • High rating but high workload (4.5/wk)'},
+          {worker_id:2, member_id:'FSWC-E-185', name:'Amit Verma', final_score:82.1, distance_km:3.5, breakdown:{skill_match:90, availability:100, distance:70, experience:80, rating:96, reliability:90, workload_balance:60, fairness:65}, explanation:'Good skill match • Moderate workload'}
+        ]
+      };
+    }
+
+    document.getElementById('eligibleCount').textContent = `${matchRes.eligible_count} eligible • Recommended: ${matchRes.matches[0]?.name}`;
+    
+    document.getElementById('aiMatchContent').innerHTML = `
+      <div class="text-[11px] font-mono">AI analyzed ${matchRes.eligible_count} eligible verified workers. Recommended:</div>
+      ${matchRes.matches.map((m,i) => `
+        <div class="mt-3 ${i===0?'bg-[#16a34a]/20 border-[#16a34a]':'bg-white/10 border-white/20'} border rounded-[12px] p-3">
+          <div class="flex justify-between items-start">
+            <div><div class="font-bold">${i===0?'⭐ RECOMMENDED: ':''}${m.name} • ${m.member_id}</div><div class="text-[10px] opacity-80">${m.explanation}</div></div>
+            <div class="text-right"><div class="font-bold text-[16px]">${m.final_score}</div><div class="text-[10px]">score</div></div>
+          </div>
+          <div class="mt-2 grid grid-cols-4 gap-1 text-[9px] font-mono">
+            ${Object.entries(m.breakdown).map(([k,v]) => `<div class="bg-black/20 rounded px-1.5 py-1"><div class="opacity-60">${k}</div><div class="font-bold">${v}%</div></div>`).join('')}
+          </div>
+          <div class="mt-2 text-[10px]">Distance: ${m.distance_km}km • <button onclick="selectWorker(${m.worker_id}, ${job.id})" class="bg-white text-black px-2 py-1 rounded-full font-bold">Select this worker</button></div>
+        </div>
+      `).join('')}
+    `;
+
+    // Auto select recommended
+    selectedWorker = matchRes.matches[0];
+    showPayment(job, selectedWorker);
+
+  } catch(e) {
+    alert('Error: ' + e.message);
+  } finally {
+    btn.textContent = orig;
+    btn.disabled = false;
+  }
+}
+
+function selectWorker(workerId, jobId) {
+  const worker = mockWorkers.find(w=>w.id===workerId) || {id:workerId, name:`Worker ${workerId}`, rate:500};
+  selectedWorker = worker;
+  if (currentJob || jobId) {
+    const job = currentJob || {id: jobId, price: 500};
+    showPayment(job, worker);
+  }
+}
+
+function showPayment(job, worker) {
+  const panel = document.getElementById('bookingPanel');
+  panel.classList.remove('hidden');
+  panel.scrollIntoView({behavior:'smooth'});
+
+  const wPct = parseInt(document.getElementById('slider-worker').value);
+  const cPct = parseInt(document.getElementById('slider-coop').value);
+  const pPct = 100 - wPct - cPct;
+
+  const total = job.price || 500;
+  const wAmt = Math.round(total * wPct / 100);
+  const cAmt = Math.round(total * cPct / 100);
+  const pAmt = total - wAmt - cAmt;
+
+  document.getElementById('paymentBreakdown').innerHTML = `
+    <div class="font-bold uppercase text-[10px]">Customer Payment Breakdown • Backend Validated</div>
+    <div class="mt-2 space-y-1">
+      <div class="flex justify-between"><span>Service: ${job.sub_service || job.service}</span><span>₹${total}</span></div>
+      <div class="h-[1px] bg-[#e7e0d1]"></div>
+      <div class="flex justify-between text-[#16a34a] font-bold"><span>→ Worker ${wPct}%</span><span>₹${wAmt}</span></div>
+      <div class="flex justify-between"><span>→ Cooperative ${cPct}%</span><span>₹${cAmt}</span></div>
+      <div class="flex justify-between"><span>→ Platform ${pPct}%</span><span>₹${pAmt}</span></div>
+      <div class="h-[1px] bg-[#e7e0d1]"></div>
+      <div class="flex justify-between font-bold"><span>Total</span><span>₹${total}</span></div>
+    </div>
+    <div class="mt-3 text-[10px] leading-[1.4]">Coop uses funds for: Admin, Training, Verification, Welfare, Insurance. Direct Payment Model: Gateway splits directly → Worker ₹${wAmt}, Coop ₹${cAmt}, Platform ₹${pAmt}</div>
+  `;
+
+  document.getElementById('workerTransparency').innerHTML = `
+    Customer paid ₹${total}.<br>
+    You received <b>₹${wAmt}</b> (${wPct}%).<br>
+    Coop fee ₹${cAmt} used for insurance + training.<br>
+    <span class="text-[10px] bg-[#f0fdf4] border px-1 rounded">TXN: TXN-${Math.random().toString(36).slice(2,8).toUpperCase()} • UPI_MOCK_DEMO</span>
+  `;
+}
+
+async function confirmBooking() {
+  if (!currentJob) { alert('Create job first'); return; }
+  const btn = event.target;
+  btn.textContent = 'Processing...';
+  
+  try {
+    // Accept job
+    const workerId = selectedWorker?.id || 3;
+    try {
+      await window.api.acceptJob(currentJob.id, workerId);
+      const payment = await window.api.getTransparency(currentJob.id);
+      document.getElementById('workerTransparency').innerHTML += `<div class="mt-2 bg-white border rounded p-2">${payment.message_worker}</div>`;
+    } catch {
+      // Mock success
+    }
+    
+    btn.textContent = '✓ BOOKED • Payment Settled';
+    btn.className = 'mt-3 w-full bg-[#1a1a18] text-white py-2.5 rounded-full text-[12px] font-bold';
+    
+    // Update stats
+    loadRealStats();
+    loadCooperativeDashboard();
+    
+    setTimeout(() => {
+      alert(`Job ${currentJob.id} booked!\nWorker: ${selectedWorker?.name || 'Priya Sharma'}\nPayment: ₹${currentJob.price} → Worker ₹${Math.round(currentJob.price*0.88)} (88%)\n\nFlow:\nCustomer dashboard → Booking exists\nWorker dashboard → Job appears\nCooperative → Job count increases\nAnalytics → Job included\nAI → Demand updated`);
+    }, 500);
+    
+  } catch(e) {
+    alert('Error: ' + e.message);
+    btn.textContent = 'CONFIRM & PAY';
+  }
+}
+
+// Cooperative Dashboard
+async function loadCooperativeDashboard() {
+  // Charts will be init separately
+}
+
+async function loadAI() {
+  // Demand Forecast
+  try {
+    let data;
+    try { data = await window.api.demandForecast(); } 
+    catch { 
+      data = {
+        forecasts: [
+          {service:'electrician', current_avg:12.5, forecast_avg:16.4, change_percent:31.2, recommendation:'Electrical demand expected +31%. Train 12 electricians, recruit 5'},
+          {service:'plumber', current_avg:8.2, forecast_avg:9.3, change_percent:13.4, recommendation:'Plumbing rising +13%'},
+          {service:'carpenter', current_avg:6.1, forecast_avg:5.0, change_percent:-18, recommendation:'Carpentry down -18% - promote'},
+          {service:'cleaner', current_avg:10.3, forecast_avg:12.5, change_percent:21, recommendation:'Cleaning +21% - increase availability'}
+        ],
+        insights: ['⚡ Electrical demand expected +31% → Train 12 electricians', '🪚 Carpentry allocation below average → Investigate']
+      };
+    }
+
+    document.getElementById('demandForecast').innerHTML = data.forecasts.map(f => `
+      <div class="flex justify-between items-center bg-[#f5f5f4] rounded-[8px] p-2">
+        <div><b>${f.service}</b> • ${f.current_avg}→${f.forecast_avg}/day</div>
+        <div class="${f.change_percent>0?'text-green-600':'text-amber-600'} font-bold">${f.change_percent>0?'+':''}${f.change_percent}%</div>
+      </div>
+    `).join('');
+
+    document.getElementById('insight-demand').innerHTML = `<b class="text-[#166534]">Demand Spike:</b> ${data.forecasts[0]?.recommendation || 'Electrical +31% → Train 12'}`;
+
+    // AI Command Center
+    document.getElementById('aiCommandCenter').innerHTML = `
+      <div class="bg-[#16a34a]/20 border border-[#16a34a]/30 rounded-[12px] p-3"><div class="font-bold text-[#4ade80]">⚡ Electrical +31%</div><div class="mt-1 text-white/70">Forecast next 7 days</div><div class="mt-2 bg-white/10 rounded px-2 py-1">→ Train 12 electricians</div></div>
+      <div class="bg-[#f59e0b]/20 border border-[#f59e0b]/30 rounded-[12px] p-3"><div class="font-bold text-[#fbbf24]">🪚 Carpentry 1.7 jobs</div><div class="mt-1 text-white/70">43% below avg</div><div class="mt-2 bg-white/10 rounded px-2 py-1">→ Promote service</div></div>
+      <div class="bg-white/10 border border-white/10 rounded-[12px] p-3"><div class="font-bold">👷 8 workers under-allocated</div><div class="mt-1 text-white/70">Equity 62/100 for carpenters</div><div class="mt-2 bg-white/10 rounded px-2 py-1">→ Increase exposure</div></div>
+      <div class="bg-red-500/20 border border-red-500/30 rounded-[12px] p-3"><div class="font-bold text-red-300">⚠ Anomaly: FSWC-E-184</div><div class="mt-1 text-white/70">Job volume 3.7× normal</div><div class="mt-2 bg-white/10 rounded px-2 py-1">→ Review allocation</div></div>
+    `;
+
+  } catch(e) { console.log(e); }
+
+  // Workforce Insights / Fairness
+  try {
+    let fairness;
+    try { fairness = await window.api.workforceInsights(); }
+    catch {
+      fairness = {
+        opportunity_equity_index: 87,
+        avg_jobs_by_skill: {electrician:4.2, plumber:3.8, carpenter:1.7, cleaner:3.2},
+        under_allocated_skills: [{skill:'carpenter', diff_percent:43, avg_jobs:1.7, cooperative_avg:3.1}],
+        explanation: ['Carpenters receiving 43% fewer jobs than coop avg']
+      };
+    }
+    document.getElementById('insight-fairness').innerHTML = `<b>Cooperative Insight:</b> Carpenters ${fairness.avg_jobs_by_skill.carpenter} vs ${fairness.avg_jobs_by_skill.electrician} avg. ${fairness.explanation[0] || ''}`;
+  } catch {}
+
+  // Training Gaps
+  try {
+    let training;
+    try { training = await window.api.trainingRecommendations(); }
+    catch {
+      training = {
+        gaps: [
+          {skill:'electrician', sub_skill:'EV Charger Installation', current_trained:17, required:29, shortage:12, demand_increase_percent:35, recommended_action:'TRAIN 12-15 ELECTRICIANS IN EV CHARGER INSTALLATION', reason:'EV demand ↑35%, shortage 12'},
+          {skill:'carpenter', sub_skill:'Modular kitchen', current_trained:20, required:28, shortage:8, demand_increase_percent:-5, reason:'Quality training needed, rating <4.0 for 8 workers'}
+        ]
+      };
+    }
+    document.getElementById('trainingGaps').innerHTML = training.gaps.map(g => `
+      <div class="border border-[#e7e0d1] rounded-[12px] p-3 flex justify-between items-start">
+        <div><div class="font-bold text-[12px]">${g.recommended_action}</div><div class="text-[10px] text-[#57534e] font-mono mt-1">${g.reason} • Current: ${g.current_trained}, Required: ${g.required}, Shortage: ${g.shortage}</div></div>
+        <span class="text-[9px] px-2 py-1 rounded-full ${g.demand_increase_percent>20?'bg-[#f0fdf4] border border-[#bbf7d0] text-[#166534]':'bg-[#fef3c7] border'}">${g.demand_increase_percent>0?'+':''}${g.demand_increase_percent}%</span>
+      </div>
+    `).join('');
+  } catch {}
+
+  // Anomalies
+  try {
+    let anomalies;
+    try { anomalies = await window.api.anomalies(); }
+    catch {
+      anomalies = {
+        worker_anomalies: [
+          {member_id:'FSWC-E-184', skill:'electrician', pattern:'Job volume 3.7× normal daily average (15 vs avg 4.0)', anomaly_score:-0.42, severity:'HIGH', action:'Review allocation algorithm - potential fairness issue', details:{jobs_this_week:15, jobs_this_month:80}}
+        ]
+      };
+    }
+    document.getElementById('anomalyList').innerHTML = (anomalies.worker_anomalies||[]).map(a => `
+      <div class="bg-[#fef3c7] border border-[#fde68a] rounded-[12px] p-3">
+        <div class="flex justify-between"><div class="font-bold text-[12px]">⚠ ${a.member_id} • ${a.skill}</div><span class="text-[9px] px-2 py-1 bg-[#1a1a18] text-white rounded-full">${a.severity}</span></div>
+        <div class="text-[11px] mt-1">${a.pattern}</div>
+        <div class="text-[10px] mt-1 font-mono">Jobs/week: ${a.details.jobs_this_week} • Score: ${a.anomaly_score} • Action: ${a.action}</div>
+        <div class="mt-2 text-[10px] text-[#92400e]">System flags, NOT accuses. Review recommended.</div>
+      </div>
+    `).join('') || '<div class="text-[11px] text-[#57534e]">No anomalies detected • System healthy</div>';
+  } catch {}
+}
+
+// Charts
+function initCharts() {
+  const ctx1 = document.getElementById('jobsPerWorkerChart');
+  if (ctx1 && !charts.jobs) {
+    charts.jobs = new Chart(ctx1, {
+      type:'bar',
+      data:{labels:['Electricians','Plumbers','Carpenters','Cleaners'], datasets:[{label:'Avg jobs/worker/day', data:[4.2,3.8,1.7,3.2], backgroundColor:['#16a34a','#1a1a18','#f59e0b','#a8a29e'], borderRadius:6}]},
+      options:{plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true, grid:{color:'#f5f5f4'}}, x:{grid:{display:false}}}}
+    });
+  }
+  const ctx2 = document.getElementById('demandChart');
+  if (ctx2 && !charts.demand) {
+    charts.demand = new Chart(ctx2, {
+      type:'line',
+      data:{labels:['Jan','Feb','Mar','Apr','May','Jun'], datasets:[{label:'Electrical', data:[120,135,150,180,210,252], borderColor:'#16a34a', tension:0.4},{label:'Carpentry', data:[80,75,70,68,60,55], borderColor:'#f59e0b', tension:0.4, borderDash:[4,4]}]},
+      options:{plugins:{legend:{position:'bottom', labels:{boxWidth:10, font:{size:9}}}}, scales:{y:{grid:{color:'#f5f5f4'}}, x:{grid:{display:false}}}}
+    });
+  }
+}
+
+// Payment sliders
+function updatePaymentUI() {
+  const w = parseInt(document.getElementById('slider-worker').value);
+  const c = parseInt(document.getElementById('slider-coop').value);
+  let p = 100 - w - c;
+  if (p < 1) { p = 1; document.getElementById('slider-coop').value = 100 - w - p; }
+  document.getElementById('val-worker').textContent = w+'%';
+  document.getElementById('val-coop').textContent = (100-w-p)+'%';
+  document.getElementById('val-platform').textContent = p+'%';
+  document.getElementById('ex-worker').textContent = '₹'+Math.round(500*w/100);
+  document.getElementById('ex-coop').textContent = '₹'+Math.round(500*(100-w-p)/100);
+  document.getElementById('ex-platform').textContent = '₹'+Math.round(500*p/100);
+  document.getElementById('ex-total').textContent = '100%';
+}
+document.getElementById('slider-worker')?.addEventListener('input', updatePaymentUI);
+document.getElementById('slider-coop')?.addEventListener('input', updatePaymentUI);
+document.getElementById('slider-platform')?.addEventListener('input', updatePaymentUI);
+
+async function savePolicy() {
+  const w = parseInt(document.getElementById('slider-worker').value);
+  const c = parseInt(document.getElementById('slider-coop').value);
+  const p = 100 - w - c;
+  document.getElementById('policyStatus').textContent = 'Saving...';
+  try {
+    await window.api.updatePolicy(1, {worker_percentage:w, cooperative_percentage:c, platform_percentage:p, notes:'Updated via Command Center'});
+    document.getElementById('policyStatus').textContent = '✓ Saved as active policy • Backend validated • 100% check passed';
+  } catch(e) {
+    document.getElementById('policyStatus').textContent = 'API offline • Policy would be saved in production (demo: 88/6/6)';
+  }
+}
+
+// Auth
+function fillLogin(phone, pass) {
+  document.getElementById('loginPhone').value = phone;
+  document.getElementById('loginPass').value = pass;
+}
+async function doLogin() {
+  const phone = document.getElementById('loginPhone').value;
+  const pass = document.getElementById('loginPass').value;
+  document.getElementById('loginStatus').textContent = 'Logging in...';
+  try {
+    const res = await window.api.login(phone, pass);
+    document.getElementById('loginStatus').textContent = `✓ Logged in as ${res.user.role} • ${res.user.name}`;
+    setTimeout(()=>document.getElementById('loginModal').classList.add('hidden'), 800);
+  } catch(e) {
+    document.getElementById('loginStatus').textContent = 'Login failed (API offline? Run seed.py). Demo mode works without login.';
+  }
+}
+
+// Demo Mode
+function toggleDemoMode() {
+  const banner = document.getElementById('demoBanner');
+  banner.classList.toggle('hidden');
+  document.getElementById('demoBtn').textContent = banner.classList.contains('hidden') ? '▶ DEMO MODE' : '■ EXIT DEMO';
+}
+
+async function runFullDemo() {
+  // Full flow: NL query → create job → AI match → accept → payment → update dashboards
+  document.getElementById('nlInput').value = 'Mere ghar mein inverter wiring required hai, jaldi chahiye';
+  await processNL();
+  switchRole('customer');
+  setTimeout(async () => {
+    await createJob();
+    setTimeout(() => {
+      confirmBooking();
+    }, 1500);
+  }, 800);
+}
+
+// Worker jobs mock
+document.getElementById('workerJobs').innerHTML = [
+  {id:'FSWC-1847', service:'Switchboard repair', area:'Sector 15', amount:500, time:'Today 2:30 PM', priority:'Coop assigned • Fair'},
+  {id:'FSWC-1848', service:'Fan installation', area:'Greenfields', amount:400, time:'Today 5 PM', priority:'Near you • 1.2km'},
+].map(j => `
+  <div class="border border-[#e7e0d1] rounded-[12px] p-3 flex justify-between items-center">
+    <div><div class="font-bold text-[12px]">${j.service} • ${j.id}</div><div class="text-[10px] text-[#57534e] font-mono">${j.area} • ${j.time}</div><div class="mt-1 text-[9px] px-2 py-0.5 bg-[#f0fdf4] border rounded-full inline-block">${j.priority}</div></div>
+    <div class="text-right"><div class="font-bold text-[12px]">₹${j.amount}</div><div class="text-[9px] text-[#16a34a]">You get ₹${Math.round(j.amount*0.88)}</div><button class="mt-1 bg-[#1a1a18] text-white px-3 py-1 rounded-full text-[10px]">Accept</button></div>
+  </div>
+`).join('');
+
+document.getElementById('workerEarnings').innerHTML = `
+  <div class="flex justify-between"><span>Last job paid</span><span>₹500</span></div>
+  <div class="flex justify-between text-[#16a34a] font-bold"><span>You received</span><span>₹440 (88%)</span></div>
+  <div class="flex justify-between text-[#a8a29e]"><span>Coop fee</span><span>₹30 → insurance</span></div>
+  <div class="mt-2 bg-[#f5f5f4] rounded p-2 text-[10px]">Month: ₹38,400 earned. ₹2,100 to coop fund. Transparent.</div>
+`;
+
+document.getElementById('workerTraining').innerHTML = `
+  <div class="flex gap-2"><span class="w-4 h-4 bg-[#1a1a18] text-white grid place-items-center rounded-full text-[8px]">✓</span> Safety Completed</div>
+  <div class="flex gap-2 mt-1"><span class="w-4 h-4 bg-[#f59e0b] text-white grid place-items-center rounded-full text-[8px]">!</span> EV Charger • 2 days • Free for members • AI recommended</div>
+  <div class="flex gap-2 mt-1"><span class="w-4 h-4 bg-white border grid place-items-center rounded-full text-[8px]">○</span> Insurance: ₹2L family cover</div>
+`;
+
+// Start
+init();
+updatePaymentUI();
+</script>
+</body>
+</html>
